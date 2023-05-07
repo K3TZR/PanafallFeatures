@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-  name: "PanafallFeature",
+  name: "PanFeature",
   platforms: [
     .macOS(.v13),
   ],

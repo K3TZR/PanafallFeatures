@@ -10,10 +10,10 @@ let package = Package(
   ],
   
   products: [
-    .library(name: "AntennaFeature", targets: ["AntennaFeature"]),
-    .library(name: "BandFeature", targets: ["BandFeature"]),
-    .library(name: "DaxFeature", targets: ["DaxFeature"]),
-    .library(name: "DisplayFeature", targets: ["DisplayFeature"]),
+//    .library(name: "AntennaFeature", targets: ["AntennaFeature"]),
+//    .library(name: "BandFeature", targets: ["BandFeature"]),
+//    .library(name: "DaxFeature", targets: ["DaxFeature"]),
+//    .library(name: "DisplayFeature", targets: ["DisplayFeature"]),
     .library(name: "PanafallFeature", targets: ["PanafallFeature"]),
   ],
   
@@ -26,65 +26,49 @@ let package = Package(
 
   // --------------- Modules ---------------
   targets: [
-    // AntennaFeature
-    .target(name: "AntennaFeature",
+    // PanafallAntennaFeature
+    .target(name: "PanafallAntennaFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
-    // BandFeature
-    .target(name: "BandFeature",
+    // PanafallBandFeature
+    .target(name: "PanafallBandFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
-    // DaxFeature
-    .target(name: "DaxFeature",
+    // PanafallDaxFeature
+    .target(name: "PanafallDaxFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
-    // DisplayFeature
-    .target(name: "DisplayFeature",
+    // PanafallDisplayFeature
+    .target(name: "PanafallDisplayFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
-//    // LeftSideFeature
-//    .target(name: "LeftSideFeature",
-//            dependencies: [
-//              "AntennaFeature",
-//              "BandFeature",
-//              "DaxFeature",
-//              "DisplayFeature",
-//              "MonitorView",
-//              .product(name: "FlexApi", package: "ApiFeature"),
-//              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-//            ]),
-//
     // PanafallFeature
     .target(name: "PanafallFeature",
             dependencies: [
+              "PanafallAntennaFeature",
+              "PanafallBandFeature",
+              "PanafallDaxFeature",
+              "PanafallDisplayFeature",
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
-    
-    // PickerFeature
-//    .target(name: "PickerFeature",
-//            dependencies: [
-//              .product(name: "Listener", package: "ApiFeature"),
-//              .product(name: "Shared", package: "ApiFeature"),
-//              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-//            ]),
     
   ]
 

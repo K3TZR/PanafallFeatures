@@ -12,26 +12,23 @@ import FlexApi
 import Shared
 
 struct DbmLinesView: View {
-//  let store: StoreOf<PanFeature>
   @ObservedObject var panadapter: Panadapter
-//  let high: CGFloat
-//  let low: CGFloat
   let spacing: CGFloat
   let width: CGFloat
   let height: CGFloat
   let color: Color
 
   var pixelPerDbm: CGFloat { height / (panadapter.maxDbm - panadapter.minDbm) }
-  var offset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: spacing) }
+  var yOffset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: spacing) }
 
   var body: some View {
     Path { path in
-      var y: CGFloat = offset * pixelPerDbm
+      var yPosition: CGFloat = yOffset * pixelPerDbm
       repeat {
-        path.move(to: CGPoint(x: 0, y: y))
-        path.addLine(to: CGPoint(x: width, y: y))
-        y += pixelPerDbm * spacing
-      } while y < height
+        path.move(to: CGPoint(x: 0, y: yPosition))
+        path.addLine(to: CGPoint(x: width, y: yPosition))
+        yPosition += pixelPerDbm * spacing
+      } while yPosition < height
     }
     .stroke(color, lineWidth: 1)
   }
@@ -40,8 +37,6 @@ struct DbmLinesView: View {
 struct DbmLinesView_Previews: PreviewProvider {
     static var previews: some View {
       DbmLinesView(panadapter: Panadapter(0x49999999),
-//                   high: 10,
-//                   low: -100,
                    spacing: 10,
                    width: 800,
                    height: 600,

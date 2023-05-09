@@ -48,16 +48,13 @@ public struct PanafallView: View {
             //            Spacer()
             
             ZStack {
-              //              // Vertical lines
-              //              //              FrequencyLinesView(center: $center,
-              //              //                                 dbmHigh: $dbmHigh,
-              //              //                                 dbmLow: $dbmLow,
-              //              //                                 bandWidth: bandWidth,
-              //              //                                 spacing: freqSpacing,
-              //              //                                 width: g.size.width,
-              //              //                                 height: g.size.height - frequencyLegendHeight,
-              //              //                                 color: linesColor)
-              //
+              // Vertical lines
+              FrequencyLinesView(panadapter: panadapter,
+                                 spacing: freqSpacing,
+                                 width: g.size.width,
+                                 height: g.size.height - frequencyLegendHeight,
+                                 color: linesColor)
+              
               // Horizontal lines
               DbmLinesView(panadapter: panadapter,
                            spacing: dbmSpacing,

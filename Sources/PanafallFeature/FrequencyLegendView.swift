@@ -7,28 +7,28 @@
 
 import SwiftUI
 
+import FlexApi
+
 struct FrequencyLegendView: View {
-  @Binding var center: CGFloat
-  @Binding var bandWidth: CGFloat
-  @Binding var spacing: CGFloat
+  @ObservedObject var panadapter: Panadapter
+  let spacing: CGFloat
   let width: CGFloat
   let format: String
   let color: Color
   
-  var offset: CGFloat { -(center - bandWidth/2).truncatingRemainder(dividingBy: spacing) }
-
-  var low: CGFloat { center - bandWidth/2 }
-  var high: CGFloat { center + bandWidth/2 }
+  var low: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
+  var high: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }
+  var xOffset: CGFloat { -low.truncatingRemainder(dividingBy: spacing) }
   var pixelPerHz: CGFloat { width / (high - low)}
   var legendWidth: CGFloat { pixelPerHz * spacing }
-  var legendsOffset: CGFloat { offset * pixelPerHz }
+  var legendsOffset: CGFloat { xOffset * pixelPerHz }
 
-  @State var startBandWidth: CGFloat?
+//  @State var startBandWidth: CGFloat?
   
   var legends: [CGFloat] {
     var array = [CGFloat]()
     
-    var currentFrequency = low + offset
+    var currentFrequency = low + xOffset
     repeat {
       array.append( currentFrequency )
       currentFrequency += spacing
@@ -45,21 +45,23 @@ struct FrequencyLegendView: View {
           .gesture(
             DragGesture()
               .onChanged { drag in
-                if let start = startBandWidth {
-                  DispatchQueue.main.async { bandWidth = start + ((drag.startLocation.x - drag.location.x)/pixelPerHz) }
-                } else {
-                  startBandWidth = bandWidth
-                }
+                print("Frequency Legend drag")
+//                if let start = startBandWidth {
+//                  DispatchQueue.main.async { bandWidth = start + ((drag.startLocation.x - drag.location.x)/pixelPerHz) }
+//                } else {
+//                  startBandWidth = bandWidth
+//                }
               }
               .onEnded { _ in
-                startBandWidth = nil
+                print("Frequency Legend drag END")
+//                startBandWidth = nil
               }
           )
           .offset(x: -legendWidth/2 )
           .foregroundColor(color)
           .contextMenu {
-            Button { spacing /= 2 } label: {Text("spacing / 2")}
-            Button { spacing *= 2 } label: {Text("spacing * 2")}
+            Button { } label: {Text("spacing / 2")}
+            Button { } label: {Text("spacing * 2")}
           }
 
       }
@@ -70,9 +72,8 @@ struct FrequencyLegendView: View {
 
 struct FrequencyLegendView_Previews: PreviewProvider {
     static var previews: some View {
-      FrequencyLegendView(center: .constant(14_100_000),
-                          bandWidth: .constant(200_000),
-                          spacing: .constant(20_000),
+      FrequencyLegendView(panadapter: Panadapter(0x49999999),
+                          spacing: 20_000,
                           width: 800,
                           format: "%.4f",
                           color: .blue)

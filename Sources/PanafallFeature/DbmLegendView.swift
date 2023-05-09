@@ -14,9 +14,7 @@ import Shared
 struct DbmLegendView: View {
   var viewStore: ViewStore<PanafallFeature.State, PanafallFeature.Action>
   @ObservedObject var panadapter: Panadapter
-  //  var high: CGFloat
-  //  var low: CGFloat
-  @Binding var spacing: CGFloat
+  let spacing: CGFloat
   let width: CGFloat
   let height: CGFloat
   let color: Color
@@ -69,10 +67,10 @@ struct DbmLegendView: View {
             }
         )
         .contextMenu {
-          Button { spacing = 5 } label: {Text("5 dbm")}
-          Button { spacing = 10 } label: {Text("10 dbm")}
-          Button { spacing = 15 } label: {Text("15 dbm")}
-          Button { spacing = 20 } label: {Text("20 dbm")}
+          Button {  } label: {Text("5 dbm")}
+          Button {  } label: {Text("10 dbm")}
+          Button {  } label: {Text("15 dbm")}
+          Button {  } label: {Text("20 dbm")}
         }
     }
   }

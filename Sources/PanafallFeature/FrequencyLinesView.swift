@@ -36,7 +36,7 @@ struct FrequencyLinesView: View {
     .gesture(
       DragGesture()
         .onChanged { drag in
-          print("Frequency drag")
+          print("Frequency lines drag")
 //          if abs(drag.startLocation.x - drag.location.x) > abs(drag.startLocation.y - drag.location.y) {
 //            if let start = startCenter {
 //              DispatchQueue.main.async { center = start + ((drag.startLocation.x - drag.location.x)/pixelPerHz) }
@@ -59,7 +59,7 @@ struct FrequencyLinesView: View {
           
         }
         .onEnded { _ in
-          print("Frequency drag END")
+          print("Frequency lines drag END")
 //          startCenter = nil
 //          startLow = nil
 //          startHigh = nil

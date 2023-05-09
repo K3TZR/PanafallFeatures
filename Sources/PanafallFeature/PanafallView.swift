@@ -22,11 +22,11 @@ public struct PanafallView: View {
   
 //  @Dependency(\.objectModel) var objectModel
   
-  @State private var center: CGFloat = 14_100_000
-  @State private var bandWidth: CGFloat = 200_000
+//  @State private var center: CGFloat = 14_100_000
+//  @State private var bandWidth: CGFloat = 200_000
   @State private var freqSpacing: CGFloat = 20_000
-  @State private var dbmHigh: CGFloat = 10
-  @State private var dbmLow: CGFloat = -100
+//  @State private var dbmHigh: CGFloat = 10
+//  @State private var dbmLow: CGFloat = -100
   @State private var dbmSpacing: CGFloat = 10
   
   let legendColor: Color = .green
@@ -65,24 +65,20 @@ public struct PanafallView: View {
               // DbmLegend
               DbmLegendView(viewStore: viewStore,
                             panadapter: panadapter,
-                            spacing: $dbmSpacing,
+                            spacing: dbmSpacing,
                             width: g.size.width,
                             height: g.size.height - frequencyLegendHeight,
                             color: legendColor)
             }
             
             // Frequency Legend
-            //            Divider().background(legendColor)
-            Spacer()
-            Text("A Panadapter")
-            Spacer()
-            //            //            FrequencyLegendView(center: $center,
-            //            //                                bandWidth: $bandWidth,
-            //            //                                spacing: $freqSpacing,
-            //            //                                width: g.size.width,
-            //            //                                format: "%0.6f",
-            //            //                                color: legendColor)
-            //            //            .frame(height: frequencyLegendHeight)
+              Divider().background(legendColor)
+              FrequencyLegendView(panadapter: panadapter,
+                                  spacing: freqSpacing,
+                                  width: g.size.width,
+                                  format: "%0.6f",
+                                  color: legendColor)
+              .frame(height: frequencyLegendHeight)
             }
           }
         }

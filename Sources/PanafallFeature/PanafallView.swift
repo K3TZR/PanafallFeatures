@@ -20,13 +20,7 @@ public struct PanafallView: View {
     self.objectModel = objectModel
   }
   
-//  @Dependency(\.objectModel) var objectModel
-  
-//  @State private var center: CGFloat = 14_100_000
-//  @State private var bandWidth: CGFloat = 200_000
   @State private var freqSpacing: CGFloat = 20_000
-//  @State private var dbmHigh: CGFloat = 10
-//  @State private var dbmLow: CGFloat = -100
   @State private var dbmSpacing: CGFloat = 10
   
   let legendColor: Color = .green
@@ -43,40 +37,35 @@ public struct PanafallView: View {
         ForEach(objectModel.panadapters) { panadapter in
           GeometryReader { g in
             VStack(alignment: .leading, spacing: 0) {
-            //            Spacer()
-            //            Text("Panadapter Window")
-            //            Spacer()
-            
-            ZStack {
-              // Vertical lines
-              FrequencyLinesView(panadapter: panadapter,
-                                 spacing: freqSpacing,
-                                 width: g.size.width,
-                                 height: g.size.height - frequencyLegendHeight,
-                                 color: linesColor)
               
-              // Horizontal lines
-              DbmLinesView(panadapter: panadapter,
-                           spacing: dbmSpacing,
-                           width: g.size.width,
-                           height: g.size.height - frequencyLegendHeight,
-                           color: linesColor)
+              ZStack {
+                // Vertical lines
+                FrequencyLinesView(panadapter: panadapter,
+                                   spacing: freqSpacing,
+                                   width: g.size.width,
+                                   height: g.size.height - frequencyLegendHeight,
+                                   color: linesColor)
+                
+                // Horizontal lines
+                DbmLinesView(panadapter: panadapter,
+                             spacing: dbmSpacing,
+                             width: g.size.width,
+                             height: g.size.height - frequencyLegendHeight,
+                             color: linesColor)
+                
+                // DbmLegend
+                DbmLegendView(viewStore: viewStore,
+                              panadapter: panadapter,
+                              spacing: dbmSpacing,
+                              width: g.size.width,
+                              height: g.size.height - frequencyLegendHeight,
+                              color: legendColor)
+              }
               
-              // DbmLegend
-              DbmLegendView(viewStore: viewStore,
-                            panadapter: panadapter,
-                            spacing: dbmSpacing,
-                            width: g.size.width,
-                            height: g.size.height - frequencyLegendHeight,
-                            color: legendColor)
-            }
-            
-            // Frequency Legend
+              // Frequency Legend
               Divider().background(legendColor)
               FrequencyLegendView(panadapter: panadapter,
-                                  spacing: freqSpacing,
                                   width: g.size.width,
-                                  format: "%0.6f",
                                   color: legendColor)
               .frame(height: frequencyLegendHeight)
             }
@@ -90,9 +79,8 @@ public struct PanafallView: View {
 
 struct PanafallView_Previews: PreviewProvider {
   static var previews: some View {
-    PanafallView( store: Store(initialState: PanafallFeature.State(),
-                          reducer: PanafallFeature()),
-             objectModel: ObjectModel())
+    PanafallView( store: Store(initialState: PanafallFeature.State(), reducer: PanafallFeature()),
+                  objectModel: ObjectModel())
     .frame(width: 1000)
   }
 }

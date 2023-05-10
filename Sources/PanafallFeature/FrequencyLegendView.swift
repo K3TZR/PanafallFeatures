@@ -13,12 +13,12 @@ import FlexApi
 struct FrequencyLegendView: View {
   var viewStore: ViewStore<PanafallFeature.State, PanafallFeature.Action>
   @ObservedObject var panadapter: Panadapter
+  let params: (spacing: CGFloat, format: String)
   let width: CGFloat
   let color: Color
   
   @State var startBandwidth: CGFloat?
   
-  var params: (spacing: CGFloat, format: String) { legendParams }
   var low: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
   var high: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }
   var xOffset: CGFloat { -low.truncatingRemainder(dividingBy: params.spacing) }
@@ -26,29 +26,6 @@ struct FrequencyLegendView: View {
   var legendWidth: CGFloat { pixelPerHz * params.spacing }
   var legendsOffset: CGFloat { xOffset * pixelPerHz }
 
-  typealias FrequencyParam = (bandwidth: Int, spacing: CGFloat, format: String)
-  var legendParams: (spacing: CGFloat, format: String) {
-    let params = [
-      FrequencyParam(10_000_000, 1_000_000, "%01.0f"),
-      FrequencyParam(5_000_000, 50_000, "%01.1f"),
-      FrequencyParam(1_000_000, 50_000, "%01.1f"),
-      FrequencyParam(500_000, 50_000, "%02.3f"),
-      FrequencyParam(400_000, 50_000, "%02.3f"),
-      FrequencyParam(300_000, 20_000, "%02.3f"),
-      FrequencyParam(200_000, 20_000, "%02.3f"),
-      FrequencyParam(100_000, 50_000, "%02.3f"),
-      FrequencyParam(50_000, 5_000, "%02.3f"),
-      FrequencyParam(40_000, 4_000, "%02.3f"),
-      FrequencyParam(30_000, 3_000, "%02.3f"),
-      FrequencyParam(20_000, 2_000, "%02.3f"),
-      FrequencyParam(10_000, 1_000, "%02.3f")
-    ]
-    
-    for param in params {
-      if panadapter.bandwidth >= param.bandwidth { return (param.spacing, param.format) }
-    }
-    return (params[0].spacing, params[0].format)
-  }
   
   var legends: [CGFloat] {
     var array = [CGFloat]()
@@ -72,7 +49,7 @@ struct FrequencyLegendView: View {
               .onChanged { value in
                 print("Frequency Legend drag")
                 if let startBandwidth {
-                  let newBandwidth = Int(startBandwidth + (value.translation.width/pixelPerHz))
+                  let newBandwidth = Int(startBandwidth - (value.translation.width/pixelPerHz))
                     viewStore.send(.frequencyLegendDrag(panadapter, newBandwidth))
                 } else {
                   startBandwidth = CGFloat(panadapter.bandwidth)

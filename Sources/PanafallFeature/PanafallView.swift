@@ -20,13 +20,34 @@ public struct PanafallView: View {
     self.objectModel = objectModel
   }
   
-  @State private var freqSpacing: CGFloat = 20_000
-  @State private var dbmSpacing: CGFloat = 10
-  
   let legendColor: Color = .green
   let linesColor: Color = .gray
   let frequencyLegendHeight: CGFloat = 30
   
+  typealias SpacingParam = (bandwidth: Int, spacing: CGFloat, format: String)
+  func spacing(_ bandwidth: Int) -> (spacing: CGFloat, format: String) {
+    let list = [
+      SpacingParam(10_000_000, 1_000_000, "%01.0f"),
+      SpacingParam(5_000_000, 50_000, "%01.1f"),
+      SpacingParam(1_000_000, 50_000, "%01.1f"),
+      SpacingParam(500_000, 50_000, "%02.3f"),
+      SpacingParam(400_000, 50_000, "%02.3f"),
+      SpacingParam(300_000, 20_000, "%02.3f"),
+      SpacingParam(200_000, 20_000, "%02.3f"),
+      SpacingParam(100_000, 50_000, "%02.3f"),
+      SpacingParam(50_000, 5_000, "%02.3f"),
+      SpacingParam(40_000, 4_000, "%02.3f"),
+      SpacingParam(30_000, 3_000, "%02.3f"),
+      SpacingParam(20_000, 2_000, "%02.3f"),
+      SpacingParam(10_000, 1_000, "%02.3f")
+    ]
+
+    for param in list {
+      if bandwidth >= param.bandwidth { return (param.spacing, param.format) }
+    }
+    return (list[0].spacing, list[0].format)
+  }
+
   public var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
       
@@ -42,14 +63,14 @@ public struct PanafallView: View {
                 // Vertical lines
                 FrequencyLinesView(viewStore: viewStore,
                                    panadapter: panadapter,
-                                   spacing: freqSpacing,
+                                   params: spacing(panadapter.bandwidth),
                                    width: g.size.width,
                                    height: g.size.height - frequencyLegendHeight,
                                    color: linesColor)
                 
                 // Horizontal lines
                 DbmLinesView(panadapter: panadapter,
-                             spacing: dbmSpacing,
+                             spacing: viewStore.dbmSpacing,
                              width: g.size.width,
                              height: g.size.height - frequencyLegendHeight,
                              color: linesColor)
@@ -57,7 +78,7 @@ public struct PanafallView: View {
                 // DbmLegend
                 DbmLegendView(viewStore: viewStore,
                               panadapter: panadapter,
-                              spacing: dbmSpacing,
+                              spacing: viewStore.dbmSpacing,
                               width: g.size.width,
                               height: g.size.height - frequencyLegendHeight,
                               color: legendColor)
@@ -67,6 +88,7 @@ public struct PanafallView: View {
               Divider().background(legendColor)
               FrequencyLegendView(viewStore: viewStore,
                                   panadapter: panadapter,
+                                  params: spacing(panadapter.bandwidth),
                                   width: g.size.width,
                                   color: legendColor)
               .frame(height: frequencyLegendHeight)

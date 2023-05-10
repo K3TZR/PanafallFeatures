@@ -16,14 +16,21 @@ public struct PanafallFeature: ReducerProtocol {
   public init() {}
   
   public struct State: Equatable {
-    public init() {}
+    public var dbmSpacing: CGFloat
+    
+    public init(dbmSpacing: CGFloat = 10) {
+      self.dbmSpacing = dbmSpacing
+    }
   }
   
   public enum Action: Equatable {
     case dbLegendDrag(Panadapter, Bool, Int)
+    case dbLegendSpacing(CGFloat)
     case frequencyLegendDrag(Panadapter, Int)
     case frequencyLinesDrag(Panadapter, Int)
     case panadapterProperty(Panadapter, Panadapter.Property, String)
+    case sliceCreate
+    case tnfCreate
   }
   
   public func reduce(into state: inout State, action: Action) ->  EffectTask<Action> {
@@ -39,6 +46,10 @@ public struct PanafallFeature: ReducerProtocol {
         await panadapter.setProperty(isUpper ? .maxDbm : .minDbm, String(newDbm))
       }
 
+    case let .dbLegendSpacing(newSpacing):
+      state.dbmSpacing = newSpacing
+      return .none
+
     case let .frequencyLegendDrag(panadapter, newBandwidth):
       return .run { _ in
         await panadapter.setProperty(.bandwidth, newBandwidth.hzToMhz)
@@ -47,6 +58,12 @@ public struct PanafallFeature: ReducerProtocol {
       return .run { _ in
         await panadapter.setProperty(.center, newCenter.hzToMhz)
       }
+      
+    case .sliceCreate:
+      return .none
+
+    case .tnfCreate:
+      return .none
     }
   }
 }

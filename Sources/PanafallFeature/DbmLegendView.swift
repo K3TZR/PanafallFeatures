@@ -66,12 +66,12 @@ struct DbmLegendView: View {
               startDbm = nil
             }
         )
-        .contextMenu {
-          Button {  } label: {Text("5 dbm")}
-          Button {  } label: {Text("10 dbm")}
-          Button {  } label: {Text("15 dbm")}
-          Button {  } label: {Text("20 dbm")}
-        }
+    }
+    .contextMenu {
+      Button("5 dbm") { viewStore.send(.dbLegendSpacing(5)) }
+      Button("10 dbm") { viewStore.send(.dbLegendSpacing( 10)) }
+      Button("15 dbm") { viewStore.send(.dbLegendSpacing( 15)) }
+      Button("20 dbm") { viewStore.send(.dbLegendSpacing( 20)) }
     }
   }
 }

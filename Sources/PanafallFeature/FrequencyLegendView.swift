@@ -5,14 +5,18 @@
 //  Created by Douglas Adams on 3/22/23.
 //
 
+import ComposableArchitecture
 import SwiftUI
 
 import FlexApi
 
 struct FrequencyLegendView: View {
+  var viewStore: ViewStore<PanafallFeature.State, PanafallFeature.Action>
   @ObservedObject var panadapter: Panadapter
   let width: CGFloat
   let color: Color
+  
+  @State var startBandwidth: CGFloat?
   
   var params: (spacing: CGFloat, format: String) { legendParams }
   var low: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
@@ -65,17 +69,18 @@ struct FrequencyLegendView: View {
           .contentShape(Rectangle())
           .gesture(
             DragGesture()
-              .onChanged { drag in
+              .onChanged { value in
                 print("Frequency Legend drag")
-//                if let start = startBandWidth {
-//                  DispatchQueue.main.async { bandWidth = start + ((drag.startLocation.x - drag.location.x)/pixelPerHz) }
-//                } else {
-//                  startBandWidth = bandWidth
-//                }
+                if let startBandwidth {
+                  let newBandwidth = Int(startBandwidth + (value.translation.width/pixelPerHz))
+                    viewStore.send(.frequencyLegendDrag(panadapter, newBandwidth))
+                } else {
+                  startBandwidth = CGFloat(panadapter.bandwidth)
+                }
               }
               .onEnded { _ in
                 print("Frequency Legend drag END")
-//                startBandWidth = nil
+                startBandwidth = nil
               }
           )
           .offset(x: -legendWidth/2 )
@@ -91,13 +96,14 @@ struct FrequencyLegendView: View {
   }
 }
 
-struct FrequencyLegendView_Previews: PreviewProvider {
-    static var previews: some View {
-      FrequencyLegendView(panadapter: Panadapter(0x49999999),
-                          width: 800,
-                          color: .blue)
-    }
-}
+//struct FrequencyLegendView_Previews: PreviewProvider {
+//    static var previews: some View {
+//      FrequencyLegendView(viewStore: ,
+//                          panadapter: Panadapter(0x49999999),
+//                          width: 800,
+//                          color: .blue)
+//    }
+//}
 
 // ----------------------------------------------------------------
 // MARK: Supporting

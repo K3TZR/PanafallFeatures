@@ -21,6 +21,8 @@ public struct PanafallFeature: ReducerProtocol {
   
   public enum Action: Equatable {
     case dbLegendDrag(Panadapter, Bool, Int)
+    case frequencyLegendDrag(Panadapter, Int)
+    case frequencyLinesDrag(Panadapter, Int)
     case panadapterProperty(Panadapter, Panadapter.Property, String)
   }
   
@@ -35,6 +37,15 @@ public struct PanafallFeature: ReducerProtocol {
     case let .dbLegendDrag(panadapter, isUpper, newDbm):
       return .run { _ in
         await panadapter.setProperty(isUpper ? .maxDbm : .minDbm, String(newDbm))
+      }
+
+    case let .frequencyLegendDrag(panadapter, newBandwidth):
+      return .run { _ in
+        await panadapter.setProperty(.bandwidth, newBandwidth.hzToMhz)
+      }
+    case let .frequencyLinesDrag(panadapter, newCenter):
+      return .run { _ in
+        await panadapter.setProperty(.center, newCenter.hzToMhz)
       }
     }
   }

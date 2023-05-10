@@ -40,7 +40,8 @@ public struct PanafallView: View {
               
               ZStack {
                 // Vertical lines
-                FrequencyLinesView(panadapter: panadapter,
+                FrequencyLinesView(viewStore: viewStore,
+                                   panadapter: panadapter,
                                    spacing: freqSpacing,
                                    width: g.size.width,
                                    height: g.size.height - frequencyLegendHeight,
@@ -64,7 +65,8 @@ public struct PanafallView: View {
               
               // Frequency Legend
               Divider().background(legendColor)
-              FrequencyLegendView(panadapter: panadapter,
+              FrequencyLegendView(viewStore: viewStore,
+                                  panadapter: panadapter,
                                   width: g.size.width,
                                   color: legendColor)
               .frame(height: frequencyLegendHeight)

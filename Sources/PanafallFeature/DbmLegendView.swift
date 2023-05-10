@@ -54,7 +54,7 @@ struct DbmLegendView: View {
             .onChanged {value in
               let isUpper = value.startLocation.y < height/2
               if let startDbm {
-                let intNewDbm = Int(startDbm + value.translation.height/pixelPerDbm)
+                let intNewDbm = Int(startDbm + (value.translation.height/pixelPerDbm))
                 if intNewDbm != Int(isUpper ? panadapter.maxDbm : panadapter.minDbm) {
                   viewStore.send(.dbLegendDrag(panadapter, isUpper, intNewDbm))
                 }

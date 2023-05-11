@@ -62,11 +62,6 @@ struct FrequencyLegendView: View {
           )
           .offset(x: -legendWidth/2 )
           .foregroundColor(color)
-          .contextMenu {
-            Button { } label: {Text("spacing / 2")}
-            Button { } label: {Text("spacing * 2")}
-          }
-
       }
       .offset(x: legendsOffset)
     }
@@ -81,18 +76,3 @@ struct FrequencyLegendView: View {
 //                          color: .blue)
 //    }
 //}
-
-// ----------------------------------------------------------------
-// MARK: Supporting
-
-func freqDrag(_ value: DragGesture.Value, _ width: CGFloat, _ bandWidth: inout CGFloat, _ startBandWidth: inout CGFloat?) {
-  
-  var pixelPerHz: CGFloat { width / bandWidth }
-  
-  if let start = startBandWidth {
-    bandWidth = start + ((value.startLocation.x - value.location.x)/pixelPerHz)
-  } else {
-    startBandWidth = bandWidth
-  }
-//  print("bandWidth = \(bandWidth)")
-}

@@ -20,8 +20,32 @@ struct FrequencyLinesView: View {
 
   var low: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
   var high: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }
-//  var xOffset: CGFloat { -low.truncatingRemainder(dividingBy: spacing) }
   var pixelPerHz: CGFloat { width / CGFloat(high - low) }
+
+  var tap: some Gesture {
+    SpatialTapGesture()
+      .modifiers(.control)
+      .onEnded { event in
+        print("Frequency lines tap: location = \(event.location)")
+      }
+  }
+  
+  var drag: some Gesture {
+    DragGesture()
+      .onChanged { value in
+        print("Frequency lines drag")
+        if let startCenter {
+          let newCenter = Int(startCenter - (value.translation.width/pixelPerHz))
+            viewStore.send(.frequencyLinesDrag(panadapter, newCenter))
+        } else {
+          startCenter = CGFloat(panadapter.center)
+        }
+      }
+      .onEnded { _ in
+        print("Frequency lines drag END")
+        startCenter = nil
+      }
+  }
 
   @State var startCenter: CGFloat?
 
@@ -37,22 +61,10 @@ struct FrequencyLinesView: View {
     .stroke(color, lineWidth: 1)
     .contentShape(Rectangle())
 
-    .gesture(
-      DragGesture()
-        .onChanged { value in
-          print("Frequency lines drag")
-          if let startCenter {
-            let newCenter = Int(startCenter - (value.translation.width/pixelPerHz))
-              viewStore.send(.frequencyLinesDrag(panadapter, newCenter))
-          } else {
-            startCenter = CGFloat(panadapter.center)
-          }
-        }
-        .onEnded { _ in
-          print("Frequency lines drag END")
-          startCenter = nil
-        }
-      )
+    .gesture(tap)
+
+    .gesture(drag)
+    
     .contextMenu {
       Button("Create Slice") { viewStore.send(.sliceCreate) }
       Button("Create Tnf") { viewStore.send(.tnfCreate) }

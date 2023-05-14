@@ -29,8 +29,8 @@ public struct PanafallFeature: ReducerProtocol {
     case frequencyLegendDrag(Panadapter, Int)
     case frequencyLinesDrag(Panadapter, Int)
     case panadapterProperty(Panadapter, Panadapter.Property, String)
-    case sliceCreate
-    case tnfCreate
+    case sliceCreate(Int)
+    case tnfCreate(Int)
   }
   
   public func reduce(into state: inout State, action: Action) ->  EffectTask<Action> {
@@ -59,16 +59,18 @@ public struct PanafallFeature: ReducerProtocol {
         await panadapter.setProperty(.center, newCenter.hzToMhz)
       }
       
-    case .sliceCreate:
+    case let .sliceCreate(frequency):
       
       // FIXME:
-      
+      print("Slice create: at \(frequency) Hz")
+
       return .none
 
-    case .tnfCreate:
+    case let .tnfCreate(frequency):
       
       // FIXME:
-      
+      print("Tnf create: at \(frequency) Hz")
+
       return .none
     }
   }

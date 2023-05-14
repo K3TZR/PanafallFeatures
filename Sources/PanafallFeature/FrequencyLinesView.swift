@@ -22,32 +22,31 @@ struct FrequencyLinesView: View {
   var high: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }
   var pixelPerHz: CGFloat { width / CGFloat(high - low) }
 
-  var tap: some Gesture {
-    SpatialTapGesture()
-      .modifiers(.control)
-      .onEnded { event in
-        print("Frequency lines tap: location = \(event.location)")
-      }
-  }
-  
+  // left-drag
   var drag: some Gesture {
-    DragGesture()
+    DragGesture(minimumDistance: pixelPerHz)
       .onChanged { value in
-        print("Frequency lines drag")
+//        print("Frequency lines drag")
         if let startCenter {
-          let newCenter = Int(startCenter - (value.translation.width/pixelPerHz))
+          if abs(value.translation.width) > pixelPerHz {
+            let newCenter = Int(startCenter - (value.translation.width/pixelPerHz))
             viewStore.send(.frequencyLinesDrag(panadapter, newCenter))
+          }
         } else {
           startCenter = CGFloat(panadapter.center)
         }
       }
-      .onEnded { _ in
-        print("Frequency lines drag END")
+      .onEnded { value in
+//        print("Frequency lines drag END")
         startCenter = nil
       }
   }
 
   @State var startCenter: CGFloat?
+  @State var rightMouseDownLocation: NSPoint = .zero
+  
+  var bw: CGFloat { CGFloat(panadapter.bandwidth) }
+  var clickFrequency: Int { Int(low + bw * (rightMouseDownLocation.x/width)) }
 
   var body: some View {
     Path { path in
@@ -61,13 +60,18 @@ struct FrequencyLinesView: View {
     .stroke(color, lineWidth: 1)
     .contentShape(Rectangle())
 
-    .gesture(tap)
+    .onAppear(perform: {
+      NSEvent.addLocalMonitorForEvents(matching: [.rightMouseDown]) {
+        rightMouseDownLocation = $0.locationInWindow
+        return $0
+      }
+    })
 
     .gesture(drag)
     
     .contextMenu {
-      Button("Create Slice") { viewStore.send(.sliceCreate) }
-      Button("Create Tnf") { viewStore.send(.tnfCreate) }
+      Button("Create Slice") { viewStore.send(.sliceCreate(clickFrequency)) }
+      Button("Create Tnf") { viewStore.send(.tnfCreate(clickFrequency)) }
     }
   }
 }

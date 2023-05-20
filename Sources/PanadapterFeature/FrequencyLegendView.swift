@@ -11,7 +11,7 @@ import SwiftUI
 import FlexApi
 
 struct FrequencyLegendView: View {
-  var viewStore: ViewStore<PanFeature.State, PanFeature.Action>
+  var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
   @ObservedObject var panadapter: Panadapter
   let width: CGFloat
   let spacings: [(Int,Int)]
@@ -96,7 +96,7 @@ struct FrequencyLegendView_Previews: PreviewProvider {
   }
   
   static var previews: some View {
-      FrequencyLegendView(viewStore: ViewStore(Store(initialState: PanFeature.State(), reducer: PanFeature())),
+      FrequencyLegendView(viewStore: ViewStore(Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature())),
                           panadapter: pan,
                           width: 800,
                           spacings: [

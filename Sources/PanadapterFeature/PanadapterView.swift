@@ -15,10 +15,10 @@ import Shared
 // MARK: - View
 
 public struct PanadapterView: View {
-  let store: StoreOf<PanFeature>
+  let store: StoreOf<PanadapterFeature>
   @ObservedObject var objectModel: ObjectModel
   
-  public init(store: StoreOf<PanFeature>, objectModel: ObjectModel) {
+  public init(store: StoreOf<PanadapterFeature>, objectModel: ObjectModel) {
     self.store = store
     self.objectModel = objectModel
   }
@@ -129,7 +129,7 @@ public struct PanadapterView: View {
 struct PanadapterView_Previews: PreviewProvider {
   
   static var previews: some View {
-    PanadapterView( store: Store(initialState: PanFeature.State(), reducer: PanFeature()),
+    PanadapterView( store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),
                     objectModel: ObjectModel())
     .frame(width:800, height: 600)
   }

@@ -15,7 +15,7 @@ import Shared
 // MARK: - View
 
 struct DbmLegendView: View {
-  var viewStore: ViewStore<PanFeature.State, PanFeature.Action>
+  var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
   @ObservedObject var panadapter: Panadapter
   let spacing: CGFloat
   let width: CGFloat
@@ -95,7 +95,7 @@ struct DbmLegendView_Previews: PreviewProvider {
   }
   
   static var previews: some View {
-    DbmLegendView(viewStore: ViewStore(Store(initialState: PanFeature.State(), reducer: PanFeature())),
+    DbmLegendView(viewStore: ViewStore(Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature())),
                   panadapter: pan,
                   spacing: 10,
                   width: 800,

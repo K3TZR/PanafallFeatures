@@ -12,7 +12,7 @@ import FlexApi
 import Shared
 
 struct SliceView: View {
-  var viewStore: ViewStore<PanFeature.State, PanFeature.Action>
+  var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
   @ObservedObject var panadapter: Panadapter
   @ObservedObject var slice: Slice
   let width: CGFloat
@@ -77,7 +77,7 @@ struct SliceView: View {
 struct SliceView_Previews: PreviewProvider {
   
   static var previews: some View {
-    SliceView(viewStore: ViewStore(Store(initialState: PanFeature.State(), reducer: PanFeature())),
+    SliceView(viewStore: ViewStore(Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature())),
               panadapter: Panadapter(0x49999999),
               slice: Slice(1),
               width: 800)

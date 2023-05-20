@@ -12,7 +12,7 @@ import FlexApi
 import Shared
 
 struct TnfView: View {
-  var viewStore: ViewStore<PanFeature.State, PanFeature.Action>
+  var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
   @ObservedObject var panadapter: Panadapter
   @ObservedObject var tnf: Tnf
   @ObservedObject var radio: Radio
@@ -98,7 +98,7 @@ struct TnfView: View {
 struct TnfView_Previews: PreviewProvider {
   
   static var previews: some View {
-    TnfView(viewStore: ViewStore(Store(initialState: PanFeature.State(), reducer: PanFeature())),
+    TnfView(viewStore: ViewStore(Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature())),
             panadapter: Panadapter(0x49999999),
             tnf: Tnf(1),
             radio: Radio(Packet()),

@@ -4,16 +4,18 @@
 import PackageDescription
 
 let package = Package(
-  name: "PanFeature",
+  name: "PanafallFeature",
   platforms: [
     .macOS(.v13),
   ],
   
   products: [
-//    .library(name: "AntennaFeature", targets: ["AntennaFeature"]),
-//    .library(name: "BandFeature", targets: ["BandFeature"]),
-//    .library(name: "DaxFeature", targets: ["DaxFeature"]),
-//    .library(name: "DisplayFeature", targets: ["DisplayFeature"]),
+    .library(name: "AntennaFeature", targets: ["AntennaFeature"]),
+    .library(name: "BandFeature", targets: ["BandFeature"]),
+    .library(name: "DaxFeature", targets: ["DaxFeature"]),
+    .library(name: "DisplayFeature", targets: ["DisplayFeature"]),
+    .library(name: "PanafallFeature", targets: ["PanadapterFeature"]),
+    .library(name: "PanafallFeature", targets: ["WaterfallFeature"]),
     .library(name: "PanafallFeature", targets: ["PanafallFeature"]),
   ],
   
@@ -26,50 +28,66 @@ let package = Package(
 
   // --------------- Modules ---------------
   targets: [
-    // PanafallAntennaFeature
-    .target(name: "PanafallAntennaFeature",
+    // AntennaFeature
+    .target(name: "AntennaFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
-    // PanafallBandFeature
-    .target(name: "PanafallBandFeature",
+    // BandFeature
+    .target(name: "BandFeature",
+            dependencies: [
+              .product(name: "FlexApi", package: "ApiFeature"),
+              .product(name: "Shared", package: "ApiFeature"),
+              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]),
+
+    // DaxFeature
+    .target(name: "DaxFeature",
+            dependencies: [
+              .product(name: "FlexApi", package: "ApiFeature"),
+              .product(name: "Shared", package: "ApiFeature"),
+              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]),
+
+    // DisplayFeature
+    .target(name: "DisplayFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
-    // PanafallDaxFeature
-    .target(name: "PanafallDaxFeature",
+    // PanadapterFeature
+    .target(name: "PanadapterFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
-    
-    // PanafallDisplayFeature
-    .target(name: "PanafallDisplayFeature",
-            dependencies: [
-              .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
-              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ]),
-    
+
     // PanafallFeature
     .target(name: "PanafallFeature",
             dependencies: [
-              "PanafallAntennaFeature",
-              "PanafallBandFeature",
-              "PanafallDaxFeature",
-              "PanafallDisplayFeature",
+              "AntennaFeature",
+              "BandFeature",
+              "DaxFeature",
+              "DisplayFeature",
               .product(name: "FlexApi", package: "ApiFeature"),
               .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
-    
+
+    // WaterfallFeature
+    .target(name: "WaterfallFeature",
+            dependencies: [
+              .product(name: "FlexApi", package: "ApiFeature"),
+              .product(name: "Shared", package: "ApiFeature"),
+              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]),
+
   ]
 
   // --------------- Tests ---------------

@@ -11,12 +11,16 @@ import SwiftUI
 import FlexApi
 import Shared
 
+// ----------------------------------------------------------------------------
+// MARK: - View
+
 struct DbmLinesView: View {
   @ObservedObject var panadapter: Panadapter
   let spacing: CGFloat
   let width: CGFloat
   let height: CGFloat
-  let color: Color
+
+  @AppStorage("dbmlines") var color: Color = .white.opacity(0.3)
 
   var pixelPerDbm: CGFloat { height / (panadapter.maxDbm - panadapter.minDbm) }
   var yOffset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: spacing) }
@@ -34,12 +38,25 @@ struct DbmLinesView: View {
   }
 }
 
+// ----------------------------------------------------------------------------
+// MARK: - Preview
+
 struct DbmLinesView_Previews: PreviewProvider {
-    static var previews: some View {
-      DbmLinesView(panadapter: Panadapter(0x49999999),
+
+  static var pan: Panadapter {
+    let p = Panadapter(0x49999999)
+    p.center = 14_100_000
+    p.bandwidth = 200_000
+    p.maxDbm = 10
+    p.minDbm = -120
+    return p
+  }
+
+  static var previews: some View {
+      DbmLinesView(panadapter: pan,
                    spacing: 10,
                    width: 800,
-                   height: 600,
-                   color: .gray)
+                   height: 600)
+      .frame(width:800, height: 600)
     }
 }

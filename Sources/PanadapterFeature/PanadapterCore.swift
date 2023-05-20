@@ -1,5 +1,5 @@
 //
-//  PanafallCore.swift
+//  PanadapterCore.swift
 //  
 //
 //  Created by Douglas Adams on 4/16/23.
@@ -12,8 +12,10 @@ import FlexApi
 import Shared
 import SwiftUI
 
-public struct PanafallFeature: ReducerProtocol {
+public struct PanadapterFeature: ReducerProtocol {
   public init() {}
+
+  @Dependency(\.apiModel) var apiModel
   
   public struct State: Equatable {
     public var dbmSpacing: CGFloat
@@ -29,8 +31,13 @@ public struct PanafallFeature: ReducerProtocol {
     case frequencyLegendDrag(Panadapter, Int)
     case frequencyLinesDrag(Panadapter, Int)
     case panadapterProperty(Panadapter, Panadapter.Property, String)
-    case sliceCreate(Int)
+    case sliceCreate(Panadapter, Int)
+    case sliceDrag(Slice, Int)
+    case sliceRemove(UInt32)
     case tnfCreate(Int)
+    case tnfRemove(UInt32)
+    case tnfProperty(Tnf, Tnf.Property, String)
+    case tnfsEnable(Bool)
   }
   
   public func reduce(into state: inout State, action: Action) ->  EffectTask<Action> {
@@ -59,19 +66,36 @@ public struct PanafallFeature: ReducerProtocol {
         await panadapter.setProperty(.center, newCenter.hzToMhz)
       }
       
-    case let .sliceCreate(frequency):
-      
-      // FIXME:
-      print("Slice create: at \(frequency) Hz")
+    case let .sliceCreate(panadapter, frequency):
+      apiModel.requestSlice(on: panadapter, at: frequency)
+      return .none
 
+    case let .sliceDrag(slice, frequency):
+      return .run { _ in
+        await slice.setProperty(.frequency, frequency.hzToMhz)
+      }
+
+    case let .sliceRemove(id):
+      apiModel.removeSlice(id)
       return .none
 
     case let .tnfCreate(frequency):
-      
-      // FIXME:
-      print("Tnf create: at \(frequency) Hz")
-
+      apiModel.requestTnf(at: frequency)
       return .none
+
+    case let .tnfProperty(tnf, property, value):
+      return .run { _ in
+        await tnf.setProperty(property, value)
+      }
+      
+    case let .tnfRemove(id):
+      apiModel.removeTnf(id)
+      return .none
+
+    case let .tnfsEnable(value):
+      return .run { _ in
+        await apiModel.radio?.setProperty(.tnfsEnabled , value.as1or0)
+      }
     }
   }
 }

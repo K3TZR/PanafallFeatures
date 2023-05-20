@@ -11,19 +11,23 @@ import SwiftUI
 import FlexApi
 import Shared
 
+// ----------------------------------------------------------------------------
+// MARK: - View
+
 struct DbmLegendView: View {
-  var viewStore: ViewStore<PanafallFeature.State, PanafallFeature.Action>
+  var viewStore: ViewStore<PanFeature.State, PanFeature.Action>
   @ObservedObject var panadapter: Panadapter
   let spacing: CGFloat
   let width: CGFloat
   let height: CGFloat
-  let color: Color
   
   var pixelPerDbm: CGFloat { height / (panadapter.maxDbm - panadapter.minDbm) }
   var offset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: spacing) }
   
   @State var startDbm: CGFloat?
-  
+
+  @AppStorage("dbmLegend") var color: Color = .green
+
   var legends: [CGFloat] {
     var array = [CGFloat]()
     
@@ -47,7 +51,7 @@ struct DbmLegendView: View {
       }
       
       Rectangle()
-        .frame(width: 40).border(.red)
+        .frame(width: 40)
         .foregroundColor(.white).opacity(0.1)
         .gesture(
           DragGesture()
@@ -76,14 +80,26 @@ struct DbmLegendView: View {
   }
 }
 
-//struct DbmLegendView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    DbmLegendView(viewStore: ,
-//                  high: 10,
-//                  low: -100,
-//                  spacing: .constant(10),
-//                  width: 800,
-//                  height: 600,
-//                  color: .white)
-//  }
-//}
+// ----------------------------------------------------------------------------
+// MARK: - Preview
+
+struct DbmLegendView_Previews: PreviewProvider {
+
+  static var pan: Panadapter {
+    let p = Panadapter(0x49999999)
+    p.center = 14_100_000
+    p.bandwidth = 200_000
+    p.maxDbm = 10.0
+    p.minDbm = -120.0
+    return p
+  }
+  
+  static var previews: some View {
+    DbmLegendView(viewStore: ViewStore(Store(initialState: PanFeature.State(), reducer: PanFeature())),
+                  panadapter: pan,
+                  spacing: 10,
+                  width: 800,
+                  height: 600)
+    .frame(width:800, height: 600)
+  }
+}

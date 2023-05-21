@@ -32,7 +32,6 @@ let package = Package(
     .target(name: "AntennaFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
@@ -40,7 +39,6 @@ let package = Package(
     .target(name: "BandFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
@@ -48,7 +46,6 @@ let package = Package(
     .target(name: "DaxFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
@@ -56,7 +53,6 @@ let package = Package(
     .target(name: "DisplayFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
@@ -64,7 +60,6 @@ let package = Package(
     .target(name: "PanadapterFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
@@ -76,7 +71,6 @@ let package = Package(
               "DaxFeature",
               "DisplayFeature",
               .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
@@ -84,10 +78,8 @@ let package = Package(
     .target(name: "WaterfallFeature",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeature"),
-              .product(name: "Shared", package: "ApiFeature"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
-
   ]
 
   // --------------- Tests ---------------

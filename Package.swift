@@ -4,19 +4,21 @@
 import PackageDescription
 
 let package = Package(
-  name: "PanafallFeature",
+  name: "PanafallFeatures",
   platforms: [
     .macOS(.v13),
   ],
   
   products: [
-    .library(name: "AntennaFeature", targets: ["AntennaFeature"]),
-    .library(name: "BandFeature", targets: ["BandFeature"]),
-    .library(name: "DaxFeature", targets: ["DaxFeature"]),
-    .library(name: "DisplayFeature", targets: ["DisplayFeature"]),
-    .library(name: "PanafallFeature", targets: ["PanadapterFeature", "WaterfallFeature", "PanafallFeature"]),
-//    .library(name: "PanafallFeature", targets: ["WaterfallFeature"]),
-//    .library(name: "PanafallFeature", targets: ["PanafallFeature"]),
+    .library(name: "PanafallFeatures", targets: [
+      "AntennaFeature",
+      "BandFeature",
+      "DaxFeature",
+      "DisplayFeature",
+      "PanadapterFeature",
+      "PanafallFeature",
+      "WaterfallFeature",
+    ]),
   ],
   
   dependencies: [

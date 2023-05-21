@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "apifeature",
+      "identity" : "apifeatures",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/K3TZR/ApiFeature.git",
+      "location" : "https://github.com/K3TZR/ApiFeatures.git",
       "state" : {
         "branch" : "main",
-        "revision" : "9404873d1fd3769cb1518b91ba46bd734f6f291a"
+        "revision" : "dbe5b39892f8c9030ebf19611772a8d857b0f9ca"
       }
     },
     {

@@ -7,10 +7,10 @@
 
 import ComposableArchitecture
 import Foundation
+import SwiftUI
 
 import FlexApi
 import Shared
-import SwiftUI
 
 public struct PanadapterFeature: ReducerProtocol {
   public init() {}

@@ -14,9 +14,9 @@ let package = Package(
     .library(name: "BandFeature", targets: ["BandFeature"]),
     .library(name: "DaxFeature", targets: ["DaxFeature"]),
     .library(name: "DisplayFeature", targets: ["DisplayFeature"]),
-    .library(name: "PanafallFeature", targets: ["PanadapterFeature"]),
-    .library(name: "PanafallFeature", targets: ["WaterfallFeature"]),
-    .library(name: "PanafallFeature", targets: ["PanafallFeature"]),
+    .library(name: "PanafallFeature", targets: ["PanadapterFeature", "WaterfallFeature", "PanafallFeature"]),
+//    .library(name: "PanafallFeature", targets: ["WaterfallFeature"]),
+//    .library(name: "PanafallFeature", targets: ["PanafallFeature"]),
   ],
   
   dependencies: [

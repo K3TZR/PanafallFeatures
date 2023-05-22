@@ -10,13 +10,13 @@ let package = Package(
   ],
   
   products: [
-    .library(name: "AntennaFeature", targets: ["AntennaFeature"]),
-    .library(name: "BandFeature", targets: ["BandFeature"]),
-    .library(name: "DaxFeature", targets: ["DaxFeature"]),
-    .library(name: "DisplayFeature", targets: ["DisplayFeature"]),
-    .library(name: "PanadapterFeature", targets: ["PanadapterFeature"]),
-    .library(name: "PanafallFeature", targets: ["PanafallFeature"]),
-    .library(name: "WaterfallFeature", targets: ["WaterfallFeature"]),
+    .library(name: "AntennaPopover", targets: ["AntennaPopover"]),
+    .library(name: "BandPopover", targets: ["BandPopover"]),
+    .library(name: "DaxPopover", targets: ["DaxPopover"]),
+    .library(name: "DisplayPopover", targets: ["DisplayPopover"]),
+    .library(name: "Panadapter", targets: ["Panadapter"]),
+    .library(name: "Panafall", targets: ["Panafall"]),
+    .library(name: "Waterfall", targets: ["Waterfall"]),
   ],
   
   dependencies: [
@@ -28,54 +28,54 @@ let package = Package(
 
   // --------------- Modules ---------------
   targets: [
-    // AntennaFeature
-    .target(name: "AntennaFeature",
+    // AntennaPopover
+    .target(name: "AntennaPopover",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
     
-    // BandFeature
-    .target(name: "BandFeature",
+    // BandPopover
+    .target(name: "BandPopover",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
-    // DaxFeature
-    .target(name: "DaxFeature",
+    // DaxPopover
+    .target(name: "DaxPopover",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
-    // DisplayFeature
-    .target(name: "DisplayFeature",
+    // DisplayPopover
+    .target(name: "DisplayPopover",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
-    // PanadapterFeature
-    .target(name: "PanadapterFeature",
+    // Panadapter
+    .target(name: "Panadapter",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
     // PanafallFeature
-    .target(name: "PanafallFeature",
+    .target(name: "Panafall",
             dependencies: [
-              "AntennaFeature",
-              "BandFeature",
-              "DaxFeature",
-              "DisplayFeature",
+              "AntennaPopover",
+              "BandPopover",
+              "DaxPopover",
+              "DisplayPopover",
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
     // WaterfallFeature
-    .target(name: "WaterfallFeature",
+    .target(name: "Waterfall",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),

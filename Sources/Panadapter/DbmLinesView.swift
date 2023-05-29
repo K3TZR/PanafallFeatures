@@ -16,23 +16,22 @@ import Shared
 
 struct DbmLinesView: View {
   @ObservedObject var panadapter: Panadapter
-  let spacing: CGFloat
-  let width: CGFloat
-  let height: CGFloat
-
+  let size: CGSize
+  
   @AppStorage("dbmlines") var color: Color = .white.opacity(0.3)
+  @AppStorage("dbmSpacing") var dbmSpacing: Int = 10
 
-  var pixelPerDbm: CGFloat { height / (panadapter.maxDbm - panadapter.minDbm) }
-  var yOffset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: spacing) }
+  var pixelPerDbm: CGFloat { size.height / (panadapter.maxDbm - panadapter.minDbm) }
+  var yOffset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbmSpacing)) }
 
   var body: some View {
     Path { path in
       var yPosition: CGFloat = yOffset * pixelPerDbm
       repeat {
         path.move(to: CGPoint(x: 0, y: yPosition))
-        path.addLine(to: CGPoint(x: width, y: yPosition))
-        yPosition += pixelPerDbm * spacing
-      } while yPosition < height
+        path.addLine(to: CGPoint(x: size.width, y: yPosition))
+        yPosition += (pixelPerDbm * CGFloat(dbmSpacing))
+      } while yPosition < size.height
     }
     .stroke(color, lineWidth: 1)
   }
@@ -53,10 +52,7 @@ struct DbmLinesView_Previews: PreviewProvider {
   }
 
   static var previews: some View {
-      DbmLinesView(panadapter: pan,
-                   spacing: 10,
-                   width: 800,
-                   height: 600)
-      .frame(width:800, height: 600)
+    DbmLinesView(panadapter: pan, size: CGSize(width: 900, height: 450))
+      .frame(width: 900, height: 450)
     }
 }

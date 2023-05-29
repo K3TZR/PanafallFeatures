@@ -14,14 +14,8 @@ import Shared
 public struct DisplayFeature: ReducerProtocol {
   public init() {}
   
-  public struct State: Equatable {
-    public var panadapterId: UInt32?
-    public var waterfallId: UInt32?
-    
-    public init(panadapterId: UInt32?, waterfallId: UInt32?) {
-      self.panadapterId = panadapterId
-      self.waterfallId = waterfallId
-    }
+  public struct State: Equatable {    
+    public init() {}
   }
   
   public enum Action: Equatable {

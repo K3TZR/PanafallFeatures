@@ -16,70 +16,75 @@ import FlexApi
 struct FrequencyLinesView: View {
   var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
   @ObservedObject var panadapter: Panadapter
-  let width: CGFloat
-  let height: CGFloat
   let spacings: [(Int,Int)]
-  
-  var low: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
-  var high: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }
-  var pixelPerHz: CGFloat { width / CGFloat(high - low) }
   
   @State var startCenter: CGFloat?
   @State var rightMouseDownLocation: NSPoint = .zero
   
   @AppStorage("gridlines") var color: Color = .white.opacity(0.3)
   
-  var bw: CGFloat { CGFloat(panadapter.bandwidth) }
-  var clickFrequency: Int { Int(low + bw * (rightMouseDownLocation.x/width)) }
-  
-  private var spacing: Int {
+  private var spacing: CGFloat {
     for spacing in spacings {
-      if panadapter.bandwidth >= spacing.0 { return spacing.1 }
+      if panadapter.bandwidth >= spacing.0 { return CGFloat(spacing.1) }
     }
-    return spacings[0].1
+    return CGFloat(spacings[0].1)
+  }
+  
+  private func initialXPosition(_ width: CGFloat) -> CGFloat {
+    -CGFloat(panadapter.center - panadapter.bandwidth/2).truncatingRemainder(dividingBy: spacing) * pixelPerHz(width)
+  }
+  
+  private func pixelPerHz(_ width: CGFloat) -> CGFloat {
+    width / CGFloat(panadapter.bandwidth)
+  }
+  
+  private func clickFrequency(_ width: CGFloat) -> Int {
+    Int( CGFloat(panadapter.center - panadapter.bandwidth/2) + CGFloat(panadapter.bandwidth) * (rightMouseDownLocation.x / width) )
   }
   
   var body: some View {
-    Path { path in
-      var xPosition: CGFloat = (-low.truncatingRemainder(dividingBy: CGFloat(spacing)) * pixelPerHz)
-      repeat {
-        path.move(to: CGPoint(x: xPosition, y: 0))
-        path.addLine(to: CGPoint(x: xPosition, y: height))
-        xPosition += pixelPerHz * CGFloat(spacing)
-      } while xPosition < width
-    }
-    .stroke(color, lineWidth: 1)
-    .contentShape(Rectangle())
-    
-    // setup right mouse down tracking
-    .onAppear(perform: {
-      NSEvent.addLocalMonitorForEvents(matching: [.rightMouseDown]) {
-        rightMouseDownLocation = $0.locationInWindow
-        return $0
+    GeometryReader { g in
+      Path { path in
+        var xPosition: CGFloat = initialXPosition(g.size.width)
+        repeat {
+          path.move(to: CGPoint(x: xPosition, y: 0))
+          path.addLine(to: CGPoint(x: xPosition, y: g.size.height))
+          xPosition += pixelPerHz(g.size.width) * spacing
+        } while xPosition < g.size.width
       }
-    })
-        
-    // left-drag Panadapter center frequency
-    .gesture(
-      DragGesture()
-        .onChanged { value in
-          if let startCenter {
-            if abs(value.translation.width) > pixelPerHz {
-              let newCenter = Int(startCenter - (value.translation.width/pixelPerHz))
-              viewStore.send(.frequencyLinesDrag(panadapter, newCenter))
+      .stroke(color, lineWidth: 1)
+      .contentShape(Rectangle())
+      
+      // setup right mouse down tracking
+      .onAppear(perform: {
+        NSEvent.addLocalMonitorForEvents(matching: [.rightMouseDown]) {
+          rightMouseDownLocation = $0.locationInWindow
+          return $0
+        }
+      })
+      
+      // left-drag Panadapter center frequency
+      .gesture(
+        DragGesture()
+          .onChanged { value in
+            if let startCenter {
+              if abs(value.translation.width) > pixelPerHz(g.size.width) {
+                let newCenter = Int(startCenter - (value.translation.width / pixelPerHz(g.size.width) ))
+                viewStore.send(.frequencyLinesDrag(panadapter, newCenter))
+              }
+            } else {
+              startCenter = CGFloat(panadapter.center)
             }
-          } else {
-            startCenter = CGFloat(panadapter.center)
           }
-        }
-        .onEnded { value in
-          startCenter = nil
-        }
-    )
-    
-    .contextMenu {
-      Button("Create Slice") { viewStore.send(.sliceCreate(panadapter, clickFrequency)) }
-      Button("Create Tnf") { viewStore.send(.tnfCreate(clickFrequency)) }
+          .onEnded { value in
+            startCenter = nil
+          }
+      )
+      
+      .contextMenu {
+        Button("Create Slice") { viewStore.send(.sliceCreate(panadapter, clickFrequency(g.size.width))) }
+        Button("Create Tnf") { viewStore.send(.tnfCreate( clickFrequency(g.size.width))) }
+      }
     }
   }
 }
@@ -101,8 +106,8 @@ struct FrequencyLinesView_Previews: PreviewProvider {
   static var previews: some View {
     FrequencyLinesView(viewStore: ViewStore(Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature())),
                        panadapter: pan,
-                       width: 800,
-                       height: 600,
+                       //                       width: 800,
+                       //                       height: 600,
                        spacings: [
                         (10_000_000, 1_000_000),
                         (5_000_000, 500_000),
@@ -117,7 +122,7 @@ struct FrequencyLinesView_Previews: PreviewProvider {
                         (30_000, 3_000),
                         (20_000, 2_000),
                         (10_000, 1_000)
-                      ])
+                       ])
     .frame(width:800, height: 600)
   }
 }

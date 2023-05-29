@@ -18,19 +18,16 @@ public struct PanadapterFeature: ReducerProtocol {
   @Dependency(\.apiModel) var apiModel
   
   public struct State: Equatable {
-    public var dbmSpacing: CGFloat
     
-    public init(dbmSpacing: CGFloat = 10) {
-      self.dbmSpacing = dbmSpacing
-    }
+    public init() {}
   }
   
   public enum Action: Equatable {
     case dbLegendDrag(Panadapter, Bool, Int)
-    case dbLegendSpacing(CGFloat)
     case frequencyLegendDrag(Panadapter, Int)
     case frequencyLinesDrag(Panadapter, Int)
     case panadapterProperty(Panadapter, Panadapter.Property, String)
+    case panadapterSize(Panadapter, CGSize)
     case sliceCreate(Panadapter, Int)
     case sliceDrag(Slice, Int)
     case sliceRemove(UInt32)
@@ -48,19 +45,25 @@ public struct PanadapterFeature: ReducerProtocol {
         await panadapter.setProperty(property, value)
       }
       
+    case let .panadapterSize(panadapter, size):
+      return .run { _ in
+        
+        print("----->>>>> Panadapter width = \(size.width), height = \(size.height))")
+        
+        await panadapter.setProperty(.xPixels, String(Int(size.width)))
+        await panadapter.setProperty(.yPixels, String(Int(size.height)))
+      }
+      
     case let .dbLegendDrag(panadapter, isUpper, newDbm):
       return .run { _ in
         await panadapter.setProperty(isUpper ? .maxDbm : .minDbm, String(newDbm))
       }
 
-    case let .dbLegendSpacing(newSpacing):
-      state.dbmSpacing = newSpacing
-      return .none
-
     case let .frequencyLegendDrag(panadapter, newBandwidth):
       return .run { _ in
         await panadapter.setProperty(.bandwidth, newBandwidth.hzToMhz)
       }
+    
     case let .frequencyLinesDrag(panadapter, newCenter):
       return .run { _ in
         await panadapter.setProperty(.center, newCenter.hzToMhz)

@@ -12,35 +12,34 @@ import FlexApi
 
 public struct DisplayView: View {
   let store: StoreOf<DisplayFeature>
-  @ObservedObject var objectModel: ObjectModel
-  
-  public init(store: StoreOf<DisplayFeature>, objectModel: ObjectModel) {
+  @ObservedObject var panadapter: Panadapter
+  @ObservedObject var waterfall: Waterfall
+
+  public init(store: StoreOf<DisplayFeature>, panadapter: Panadapter, waterfall: Waterfall) {
     self.store = store
-    self.objectModel = objectModel
+    self.panadapter = panadapter
+    self.waterfall = waterfall
   }
   
-    public var body: some View {
-      WithViewStore(self.store, observe: { $0 }) { viewStore in
-
-        VStack(alignment: .leading) {
-          if objectModel.activePanadapter != nil {
-            PanadapterSettings(viewStore: viewStore, panadapter: objectModel.panadapters[id: objectModel.activePanadapter!.id]!)
-            Divider().foregroundColor(.blue)
-            WaterfallSettings(viewStore: viewStore,
-                              waterfall: objectModel.waterfalls[id: objectModel.panadapters[id: objectModel.activePanadapter!.id]!.waterfallId]!)
-          } else {
-            EmptyView()
-          }
-        }
-        .frame(width: 250)
-        .padding(5)
+  public var body: some View {
+    WithViewStore(self.store, observe: { $0 }) { viewStore in
+      
+      VStack(alignment: .leading) {
+        PanadapterSettings(viewStore: viewStore, panadapter: panadapter)
+        Divider().foregroundColor(.blue)
+        WaterfallSettings(viewStore: viewStore, waterfall: waterfall)
       }
+      .frame(width: 250)
+      .padding(5)
     }
+  }
 }
 
 private struct PanadapterSettings: View {
   let viewStore: ViewStore<DisplayFeature.State, DisplayFeature.Action>
   @ObservedObject var panadapter: Panadapter
+
+  @AppStorage("spectrumFillLevel") var spectrumFillLevel: Double = 0
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -56,8 +55,9 @@ private struct PanadapterSettings: View {
       }
       HStack(spacing: 10) {
         Text("Fill").frame(width: 90, alignment: .leading)
-        Text("\(panadapter.fillLevel)").frame(width: 25, alignment: .trailing)
-        Slider(value: viewStore.binding(get: {_ in Double(panadapter.fillLevel) }, send: { .panadapterProperty(panadapter, .fillLevel, String(Int($0))) }), in: 0...100)
+        Text("\(Int(spectrumFillLevel))").frame(width: 25, alignment: .trailing)
+        Slider(value: $spectrumFillLevel, in: 0...100)
+//        Slider(value: viewStore.binding(get: {_ in Double(panadapter.fillLevel) }, send: { .panadapterProperty(panadapter, .fillLevel, String(Int($0))) }), in: 0...100)
       }
       HStack {
         Text("Weighted Average").frame(width: 130, alignment: .leading)
@@ -113,7 +113,9 @@ private struct WaterfallSettings: View {
 
 struct DisplayView_Previews: PreviewProvider {
     static var previews: some View {
-      DisplayView(store: Store(initialState: DisplayFeature.State(panadapterId: 0x49999990, waterfallId: 0x49999991), reducer: DisplayFeature()), objectModel: ObjectModel())
+      DisplayView(store: Store(initialState: DisplayFeature.State(), reducer: DisplayFeature()),
+                  panadapter: Panadapter(0x49999990),
+                  waterfall: Waterfall(0x49999991))
         .frame(width: 250)
         .padding(5)
     }

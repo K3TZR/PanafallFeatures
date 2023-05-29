@@ -16,6 +16,7 @@ let package = Package(
     .library(name: "DisplayPopover", targets: ["DisplayPopover"]),
     .library(name: "Panadapter", targets: ["Panadapter"]),
     .library(name: "Panafall", targets: ["Panafall"]),
+    .library(name: "Panafalls", targets: ["Panafalls"]),
     .library(name: "Waterfall", targets: ["Waterfall"]),
   ],
   
@@ -63,9 +64,10 @@ let package = Package(
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
-    // PanafallFeature
+    // Panafall
     .target(name: "Panafall",
             dependencies: [
+              "Panadapter",
               "AntennaPopover",
               "BandPopover",
               "DaxPopover",
@@ -74,7 +76,15 @@ let package = Package(
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),
 
-    // WaterfallFeature
+    // Panafalls
+    .target(name: "Panafalls",
+            dependencies: [
+              "Panafall",
+              .product(name: "FlexApi", package: "ApiFeatures"),
+              .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]),
+
+    // Waterfall
     .target(name: "Waterfall",
             dependencies: [
               .product(name: "FlexApi", package: "ApiFeatures"),

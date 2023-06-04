@@ -17,6 +17,7 @@ struct FrequencyLinesView: View {
   var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
   @ObservedObject var panadapter: Panadapter
   let spacings: [(Int,Int)]
+  let leftWidth: CGFloat
   
   @State var startCenter: CGFloat?
   @State var rightMouseDownLocation: NSPoint = .zero
@@ -39,7 +40,10 @@ struct FrequencyLinesView: View {
   }
   
   private func clickFrequency(_ width: CGFloat) -> Int {
-    Int( CGFloat(panadapter.center - panadapter.bandwidth/2) + CGFloat(panadapter.bandwidth) * (rightMouseDownLocation.x / width) )
+    let freq = Int( CGFloat(panadapter.center - panadapter.bandwidth/2) + CGFloat(panadapter.bandwidth) * ((rightMouseDownLocation.x - leftWidth) / width) )
+    
+    print("low = \(CGFloat(panadapter.center - panadapter.bandwidth/2)), bw = \(CGFloat(panadapter.bandwidth)), width = \(width), click freq = \(freq)")
+    return freq
   }
   
   var body: some View {
@@ -122,7 +126,8 @@ struct FrequencyLinesView_Previews: PreviewProvider {
                         (30_000, 3_000),
                         (20_000, 2_000),
                         (10_000, 1_000)
-                       ])
+                       ],
+                       leftWidth: 0)
     .frame(width:800, height: 600)
   }
 }

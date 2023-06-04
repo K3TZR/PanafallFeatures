@@ -19,12 +19,14 @@ public struct PanadapterView: View {
   @ObservedObject var panadapter: Panadapter
   @ObservedObject var panadapterStream: PanadapterStream
   @ObservedObject var objectModel: ObjectModel
+  let leftWidth: CGFloat
 
-  public init(store: StoreOf<PanadapterFeature>, panadapter: Panadapter, panadapterStream: PanadapterStream, objectModel: ObjectModel) {
+  public init(store: StoreOf<PanadapterFeature>, panadapter: Panadapter, panadapterStream: PanadapterStream, objectModel: ObjectModel, leftWidth: CGFloat) {
     self.store = store
     self.panadapter = panadapter
     self.panadapterStream = panadapterStream
     self.objectModel = objectModel
+    self.leftWidth = leftWidth
   }
   
   @Dependency(\.apiModel) var apiModel
@@ -73,7 +75,7 @@ public struct PanadapterView: View {
                 SpectrumView(panadapterStream: panadapterStream)
                 
                 // Vertical lines
-                FrequencyLinesView(viewStore: viewStore, panadapter: panadapter, spacings: spacings)
+                FrequencyLinesView(viewStore: viewStore, panadapter: panadapter, spacings: spacings, leftWidth: leftWidth)
                 
                 // Horizontal lines
                 DbmLinesView(panadapter: panadapter, size: g.size)
@@ -133,7 +135,8 @@ struct PanadapterView_Previews: PreviewProvider {
     PanadapterView( store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),
                     panadapter: Panadapter(0x49999990),
                     panadapterStream: PanadapterStream(0x49999990),
-                    objectModel: ObjectModel())
+                    objectModel: ObjectModel(),
+                    leftWidth: 0)
     .frame(width:800, height: 600)
   }
 }

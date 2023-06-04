@@ -20,6 +20,7 @@ struct SliceView: View {
   static let opacity: CGFloat = 0.2
   
   @State var startFrequency: CGFloat?
+  @State var cursorInSlice = false
 
   @AppStorage("sliceBackgroundColor") var sliceBackgroundColor = Color.white.opacity(opacity)
   @AppStorage("sliceActiveColor") var sliceActiveColor = Color.red
@@ -40,12 +41,21 @@ struct SliceView: View {
         .frame(width: 2)
         .foregroundColor(slice.active ? sliceActiveColor : sliceInactiveColor)
         .offset(x: (sliceFrequency - panadapterLowFrequency) * pixelPerHz)
+        
 
       Rectangle()
+        .fill(sliceBackgroundColor)
+        .border(cursorInSlice ? .red : sliceBackgroundColor)
         .frame(width: sliceWidth * pixelPerHz)
-        .foregroundColor(sliceBackgroundColor)
         .offset(x: (sliceFrequency + sliceFilterLow - panadapterLowFrequency) * pixelPerHz)
-      
+
+        .onHover { isInsideView in
+          cursorInSlice = isInsideView
+        }
+
+
+
+
       // left-drag Slice frequency
         .gesture(
           DragGesture(minimumDistance: pixelPerHz)

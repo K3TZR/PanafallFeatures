@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import Foundation
 
 import FlexApi
 
@@ -17,7 +18,7 @@ public struct PanafallFeature: ReducerProtocol {
     var bandPopover: Bool
     var daxPopover: Bool
     var displayPopover: Bool
-
+    
     public init
     (
       antennaPopover: Bool = false,

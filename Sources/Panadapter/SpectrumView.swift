@@ -96,13 +96,3 @@ struct SpectrumShape: Shape {
 //    SpectrumView(frame: PanadapterFrame(128) )
 //  }
 //}
-
-/*
- public var bins = [UInt16](repeating: 0, count: kMaxBins) // Array of bin values
- public var binSize = 0                                    // Bin size in bytes
- public var number = 0                                     // Frame number
- public var segmentStart = 0                               // first bin in this segment
- public var segmentSize = 0                                // number of bins in this segment
- public var size = 0                                       // number of bins in the complete frame
-
- */

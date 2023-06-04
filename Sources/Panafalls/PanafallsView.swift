@@ -21,6 +21,7 @@ public struct PanafallsView: View {
   }
 
   public var body: some View {
+    WithViewStore(self.store, observe: { $0 }) { viewStore in
       VSplitView {
         ForEach(objectModel.panadapters) { panadapter in
           PanafallView(store: Store(initialState: PanafallFeature.State(), reducer: PanafallFeature()),
@@ -29,6 +30,7 @@ public struct PanafallsView: View {
         }
       }
     }
+  }
 }
 
 struct PanafallsView_Previews: PreviewProvider {

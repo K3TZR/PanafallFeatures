@@ -47,9 +47,6 @@ public struct PanadapterFeature: ReducerProtocol {
       
     case let .panadapterSize(panadapter, size):
       return .run { _ in
-        
-        print("----->>>>> Panadapter width = \(size.width), height = \(size.height))")
-        
         await panadapter.setProperty(.xPixels, String(Int(size.width)))
         await panadapter.setProperty(.yPixels, String(Int(size.height)))
       }

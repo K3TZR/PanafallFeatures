@@ -27,11 +27,12 @@ public struct PanafallView: View {
     self.panadapter = panadapter
     self.waterfall = waterfall
   }
-
+  
+  @AppStorage("leftSideIsOpen") var leftSideIsOpen = false
+  @AppStorage("rightSideIsOpen") var rightSideIsOpen = false
+  
   @Dependency(\.objectModel) var objectModel
   @Dependency(\.streamModel) var streamModel
-  
-  @State var width: CGFloat = 60
   
   public var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -41,17 +42,20 @@ public struct PanafallView: View {
           Spacer()
           BottomButtonsView(store: store, panadapter: panadapter, waterfall: waterfall)
         }
-        .frame(width: width)
+        .frame(width: leftSideIsOpen ? 60 : 0)
         .padding(.vertical, 10)
-
-        VSplitView {
-          PanadapterView(store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),
-                         panadapter: panadapter,
-                         panadapterStream: streamModel.panadapterStreams[id: panadapter.id]!,
-                         objectModel: objectModel)
-          .frame(minWidth: 900, minHeight: 450)
-          Text("Waterfall View")
-            .frame(minWidth: 900, minHeight: 100)
+        
+        ZStack(alignment: .topLeading) {
+          VSplitView {
+            PanadapterView(store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),
+                           panadapter: panadapter,
+                           panadapterStream: streamModel.panadapterStreams[id: panadapter.id]!,
+                           objectModel: objectModel,
+                           leftWidth: leftSideIsOpen ? 60 : 0)
+            .frame(minWidth: 900, minHeight: 450)
+            Text("Waterfall View")
+              .frame(minWidth: 900, minHeight: 100)
+          }
         }
       }
     }
@@ -62,7 +66,7 @@ private struct TopButtonsView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
   @ObservedObject var waterfall: Waterfall
-
+  
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
       VStack(spacing: 20) {
@@ -99,7 +103,7 @@ private struct BottomButtonsView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
   @ObservedObject var waterfall: Waterfall
-
+  
   @State var width: CGFloat = 60
   
   var body: some View {

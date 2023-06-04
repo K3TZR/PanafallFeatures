@@ -22,6 +22,7 @@ struct TnfView: View {
   static let minWidth: CGFloat = 1000
 
   @State var startFrequency: CGFloat?
+  @State var cursorInTnf = false
 
   var panadapterLowFrequency: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
   var panadapterHighFrequency: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }
@@ -43,10 +44,15 @@ struct TnfView: View {
   
   var body: some View {
     Rectangle()
+      .fill(depthColor)
+      .border(cursorInTnf ? .red : depthColor)
       .frame(width: max(CGFloat(tnf.width), TnfView.minWidth) * pixelPerHz)
-      .foregroundColor(depthColor)
-      .border(tnf.permanent ? .red : depthColor)
       .offset(x: (tnfFrequency - panadapterLowFrequency) * pixelPerHz )
+    
+      .onHover { isInsideView in
+        cursorInTnf = isInsideView
+      }
+
     
     // left-drag Tnf frequency
       .gesture(

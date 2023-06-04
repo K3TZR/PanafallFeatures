@@ -13,12 +13,13 @@ import FlexApi
 public struct DisplayView: View {
   let store: StoreOf<DisplayFeature>
   @ObservedObject var panadapter: Panadapter
-  @ObservedObject var waterfall: Waterfall
+//  @ObservedObject var waterfall: Waterfall
+  
+  @Dependency(\.objectModel) var objectModel
 
-  public init(store: StoreOf<DisplayFeature>, panadapter: Panadapter, waterfall: Waterfall) {
+  public init(store: StoreOf<DisplayFeature>, panadapter: Panadapter) {
     self.store = store
     self.panadapter = panadapter
-    self.waterfall = waterfall
   }
   
   public var body: some View {
@@ -27,7 +28,11 @@ public struct DisplayView: View {
       VStack(alignment: .leading) {
         PanadapterSettings(viewStore: viewStore, panadapter: panadapter)
         Divider().foregroundColor(.blue)
-        WaterfallSettings(viewStore: viewStore, waterfall: waterfall)
+        if panadapter.waterfallId == 0 {
+          EmptyView()
+        } else {
+          WaterfallSettings(viewStore: viewStore, waterfall: objectModel.waterfalls[id: panadapter.waterfallId]!)
+        }
       }
       .frame(width: 250)
       .padding(5)
@@ -114,8 +119,7 @@ private struct WaterfallSettings: View {
 struct DisplayView_Previews: PreviewProvider {
     static var previews: some View {
       DisplayView(store: Store(initialState: DisplayFeature.State(), reducer: DisplayFeature()),
-                  panadapter: Panadapter(0x49999990),
-                  waterfall: Waterfall(0x49999991))
+                  panadapter: Panadapter(0x49999990))
         .frame(width: 250)
         .padding(5)
     }

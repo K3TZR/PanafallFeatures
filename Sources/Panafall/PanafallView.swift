@@ -38,9 +38,9 @@ public struct PanafallView: View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
       HSplitView {
         VStack {
-          TopButtonsView(store: store, panadapter: panadapter, waterfall: waterfall)
+          TopButtonsView(store: store, panadapter: panadapter)
           Spacer()
-          BottomButtonsView(store: store, panadapter: panadapter, waterfall: waterfall)
+          BottomButtonsView(store: store, panadapter: panadapter)
         }
         .frame(width: leftSideIsOpen ? 60 : 0)
         .padding(.vertical, 10)
@@ -53,8 +53,14 @@ public struct PanafallView: View {
                            objectModel: objectModel,
                            leftWidth: leftSideIsOpen ? 60 : 0)
             .frame(minWidth: 900, minHeight: 450)
-            Text("Waterfall View")
-              .frame(minWidth: 900, minHeight: 100)
+            
+            if panadapter.waterfallId  == 0 {
+              Text("Waterfall View: id unknown")
+                .frame(minWidth: 900, minHeight: 100)
+            } else {
+              Text("Waterfall View: id = \(panadapter.waterfallId.hex)")
+                .frame(minWidth: 900, minHeight: 100)
+            }
           }
         }
       }
@@ -65,7 +71,7 @@ public struct PanafallView: View {
 private struct TopButtonsView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
-  @ObservedObject var waterfall: Waterfall
+//  @ObservedObject var waterfall: Waterfall
   
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -85,8 +91,7 @@ private struct TopButtonsView: View {
         Button("Display") { viewStore.send(.displayButton) }
           .popover(isPresented: viewStore.binding(get: { $0.displayPopover }, send: .displayButton ), arrowEdge: .trailing) {
             DisplayView(store: Store(initialState: DisplayFeature.State(), reducer: DisplayFeature()),
-                        panadapter: panadapter,
-                        waterfall: waterfall)
+                        panadapter: panadapter)
           }
         Button("Dax") { viewStore.send(.daxButton) }
           .popover(isPresented: viewStore.binding(get: { $0.daxPopover }, send: .daxButton ), arrowEdge: .trailing) {
@@ -102,7 +107,7 @@ private struct TopButtonsView: View {
 private struct BottomButtonsView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
-  @ObservedObject var waterfall: Waterfall
+//  @ObservedObject var waterfall: Waterfall
   
   @State var width: CGFloat = 60
   

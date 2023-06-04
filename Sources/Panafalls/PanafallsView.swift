@@ -25,8 +25,7 @@ public struct PanafallsView: View {
       VSplitView {
         ForEach(objectModel.panadapters) { panadapter in
           PanafallView(store: Store(initialState: PanafallFeature.State(), reducer: PanafallFeature()),
-                       panadapter: panadapter,
-                       waterfall: objectModel.waterfalls[id: panadapter.waterfallId]!)
+                       panadapter: panadapter)
         }
       }
     }

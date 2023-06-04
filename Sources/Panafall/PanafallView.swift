@@ -18,14 +18,12 @@ import DaxPopover
 public struct PanafallView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
-  @ObservedObject var waterfall: Waterfall
+//  @ObservedObject var waterfall: Waterfall
   
   public init(store: StoreOf<PanafallFeature>,
-              panadapter: Panadapter,
-              waterfall: Waterfall) {
+              panadapter: Panadapter) {
     self.store = store
     self.panadapter = panadapter
-    self.waterfall = waterfall
   }
   
   @AppStorage("leftSideIsOpen") var leftSideIsOpen = false
@@ -142,8 +140,7 @@ private struct BottomButtonsView: View {
 struct PanafallView_Previews: PreviewProvider {
   static var previews: some View {
     PanafallView(store: Store(initialState: PanafallFeature.State(), reducer: PanafallFeature()),
-                 panadapter: Panadapter(0x49999990),
-                 waterfall: Waterfall(0x49999991)
+                 panadapter: Panadapter(0x49999990)
     )
   }
 }

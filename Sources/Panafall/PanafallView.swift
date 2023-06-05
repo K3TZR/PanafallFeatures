@@ -18,13 +18,14 @@ import DaxPopover
 public struct PanafallView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
-//  @ObservedObject var waterfall: Waterfall
   
   public init(store: StoreOf<PanafallFeature>,
               panadapter: Panadapter) {
     self.store = store
     self.panadapter = panadapter
   }
+  
+  private let leftSideWidth: CGFloat = 60
   
   @AppStorage("leftSideIsOpen") var leftSideIsOpen = false
   @AppStorage("rightSideIsOpen") var rightSideIsOpen = false
@@ -35,30 +36,32 @@ public struct PanafallView: View {
   public var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
       HSplitView {
-        VStack {
-          TopButtonsView(store: store, panadapter: panadapter)
-          Spacer()
-          BottomButtonsView(store: store, panadapter: panadapter)
+        if leftSideIsOpen {
+          VStack {
+            TopButtonsView(store: store, panadapter: panadapter, leftSideIsOpen: $leftSideIsOpen)
+            Spacer()
+            BottomButtonsView(store: store, panadapter: panadapter)
+          }
+          .frame(width: leftSideWidth)
+          .padding(.vertical, 10)
         }
-        .frame(width: leftSideIsOpen ? 60 : 0)
-        .padding(.vertical, 10)
         
         ZStack(alignment: .topLeading) {
           VSplitView {
             PanadapterView(store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),
                            panadapter: panadapter,
-                           panadapterStream: streamModel.panadapterStreams[id: panadapter.id]!,
                            objectModel: objectModel,
-                           leftWidth: leftSideIsOpen ? 60 : 0)
-            .frame(minWidth: 900, minHeight: 450)
-            
-            if panadapter.waterfallId  == 0 {
-              Text("Waterfall View: id unknown")
-                .frame(minWidth: 900, minHeight: 100)
-            } else {
-              Text("Waterfall View: id = \(panadapter.waterfallId.hex)")
-                .frame(minWidth: 900, minHeight: 100)
-            }
+                           streamModel: streamModel,
+                           leftWidth: leftSideIsOpen ? leftSideWidth : 0)
+            .frame(minWidth: 500, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
+            Text("Waterfall View: id = \(panadapter.waterfallId  == 0 ? "UNKNOWN" : panadapter.waterfallId.hex)")
+              .frame(minWidth: 500, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
+          }
+          if leftSideIsOpen == false {
+            Image(systemName: "arrowshape.right.fill").font(.title)
+              .onTapGesture {
+                leftSideIsOpen.toggle()
+              }
           }
         }
       }
@@ -69,11 +72,19 @@ public struct PanafallView: View {
 private struct TopButtonsView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
-//  @ObservedObject var waterfall: Waterfall
+  let leftSideIsOpen: Binding<Bool>
   
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
-      VStack(spacing: 20) {
+      VStack(alignment: .leading, spacing: 20) {
+        Image(systemName: "arrowshape.left.fill").font(.title)
+          .onTapGesture {
+            leftSideIsOpen.wrappedValue.toggle()
+          }
+        Image(systemName: "xmark.circle").font(.title)
+          .onTapGesture {
+            viewStore.send(.closeButton(panadapter.id))
+          }
         Button("Band") { viewStore.send(.bandButton) }
           .popover(isPresented: viewStore.binding(get: { $0.bandPopover }, send: .bandButton ), arrowEdge: .trailing) {
             BandView(store: Store(initialState: BandFeature.State(), reducer: BandFeature()),
@@ -105,9 +116,6 @@ private struct TopButtonsView: View {
 private struct BottomButtonsView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
-//  @ObservedObject var waterfall: Waterfall
-  
-  @State var width: CGFloat = 60
   
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in

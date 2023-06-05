@@ -26,8 +26,12 @@ public struct PanafallsView: View {
         ForEach(objectModel.panadapters) { panadapter in
           PanafallView(store: Store(initialState: PanafallFeature.State(), reducer: PanafallFeature()),
                        panadapter: panadapter)
+          Divider()
+            .frame(height: 3)
+            .background(Color.gray)
         }
       }
+      .frame(minWidth: 500, maxWidth: .infinity, minHeight: 200, maxHeight: .infinity)
     }
   }
 }

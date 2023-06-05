@@ -17,11 +17,12 @@ import Shared
 struct DbmLinesView: View {
   @ObservedObject var panadapter: Panadapter
   let size: CGSize
+  let frequencyLegendHeight: CGFloat
   
   @AppStorage("dbmlines") var color: Color = .white.opacity(0.3)
   @AppStorage("dbmSpacing") var dbmSpacing: Int = 10
 
-  var pixelPerDbm: CGFloat { size.height / (panadapter.maxDbm - panadapter.minDbm) }
+  var pixelPerDbm: CGFloat { (size.height  - frequencyLegendHeight) / (panadapter.maxDbm - panadapter.minDbm) }
   var yOffset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbmSpacing)) }
 
   var body: some View {
@@ -31,7 +32,7 @@ struct DbmLinesView: View {
         path.move(to: CGPoint(x: 0, y: yPosition))
         path.addLine(to: CGPoint(x: size.width, y: yPosition))
         yPosition += (pixelPerDbm * CGFloat(dbmSpacing))
-      } while yPosition < size.height
+      } while yPosition < size.height - frequencyLegendHeight
     }
     .stroke(color, lineWidth: 1)
   }
@@ -52,7 +53,7 @@ struct DbmLinesView_Previews: PreviewProvider {
   }
 
   static var previews: some View {
-    DbmLinesView(panadapter: pan, size: CGSize(width: 900, height: 450))
+    DbmLinesView(panadapter: pan, size: CGSize(width: 900, height: 450), frequencyLegendHeight: 20)
       .frame(width: 900, height: 450)
     }
 }

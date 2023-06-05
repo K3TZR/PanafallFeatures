@@ -13,6 +13,8 @@ import FlexApi
 public struct PanafallFeature: ReducerProtocol {
   public init() {}
 
+  @Dependency(\.apiModel) var apiModel
+
   public struct State: Equatable {
     var antennaPopover: Bool
     var bandPopover: Bool
@@ -36,6 +38,7 @@ public struct PanafallFeature: ReducerProtocol {
   
   public enum Action: Equatable {
     case antennaButton
+    case closeButton(UInt32)
     case zoomButton(Panadapter, Panadapter.ZoomType)
     case bandButton
     case daxButton
@@ -53,6 +56,10 @@ public struct PanafallFeature: ReducerProtocol {
       
     case .bandButton:
       state.bandPopover.toggle()
+      return .none
+      
+    case let .closeButton(id):
+      apiModel.removePanadapter(id)
       return .none
       
     case .daxButton:

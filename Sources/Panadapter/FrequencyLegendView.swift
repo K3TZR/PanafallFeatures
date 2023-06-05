@@ -52,29 +52,33 @@ struct FrequencyLegendView: View {
   }
   
   var body: some View {
-    HStack(spacing: 0) {
-      ForEach(legends, id:\.self) { frequencyValue in
-        Text(String(format: format, frequencyValue/1_000_000)).frame(width: legendWidth)
-          .background(Color.white.opacity(0.1))
-          .contentShape(Rectangle())
-          .gesture(
-            DragGesture()
-              .onChanged { value in
-                if let startBandwidth {
-                  let newBandwidth = Int(startBandwidth - (value.translation.width / pixelPerHz ))
-                  viewStore.send(.frequencyLegendDrag(panadapter, newBandwidth))
-                } else {
-                  startBandwidth = CGFloat(panadapter.bandwidth)
+    VStack(alignment: .leading, spacing: 0) {
+      Divider().background(frequencyLegendColor)
+      HStack(spacing: 0) {
+        ForEach(legends, id:\.self) { frequencyValue in
+          Text(String(format: format, frequencyValue/1_000_000)).frame(width: legendWidth)
+            .background(Color.white.opacity(0.1))
+            .contentShape(Rectangle())
+            .gesture(
+              DragGesture()
+                .onChanged { value in
+                  if let startBandwidth {
+                    let newBandwidth = Int(startBandwidth - (value.translation.width / pixelPerHz ))
+                    viewStore.send(.frequencyLegendDrag(panadapter, newBandwidth))
+                  } else {
+                    startBandwidth = CGFloat(panadapter.bandwidth)
+                  }
                 }
-              }
-              .onEnded { _ in
-                startBandwidth = nil
-              }
-          )
-          .offset(x: -legendWidth/2 )
-          .foregroundColor(frequencyLegendColor)
+                .onEnded { _ in
+                  startBandwidth = nil
+                }
+            )
+            .offset(x: -legendWidth/2 )
+            .foregroundColor(frequencyLegendColor)
+        }
+        .offset(x: legendOffset)
       }
-      .offset(x: legendOffset)
+      Divider().background(frequencyLegendColor)
     }
   }
 }

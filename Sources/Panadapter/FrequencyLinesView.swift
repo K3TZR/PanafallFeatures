@@ -40,9 +40,7 @@ struct FrequencyLinesView: View {
   }
   
   private func clickFrequency(_ width: CGFloat) -> Int {
-    let freq = Int( CGFloat(panadapter.center - panadapter.bandwidth/2) + CGFloat(panadapter.bandwidth) * ((rightMouseDownLocation.x - leftWidth) / width) )
-    
-    print("low = \(CGFloat(panadapter.center - panadapter.bandwidth/2)), bw = \(CGFloat(panadapter.bandwidth)), width = \(width), click freq = \(freq)")
+    let freq = Int( CGFloat(panadapter.center - panadapter.bandwidth/2) + CGFloat(panadapter.bandwidth) * ((rightMouseDownLocation.x - leftWidth) / width) )    
     return freq
   }
   

@@ -18,7 +18,8 @@ struct DbmLegendView: View {
   var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
   @ObservedObject var panadapter: Panadapter
   let size: CGSize
-  
+  let frequencyLegendHeight: CGFloat
+
   @State var startDbm: CGFloat?
   
   @AppStorage("dbmLegend") var dbmLegendColor: Color = .green
@@ -27,7 +28,7 @@ struct DbmLegendView: View {
   var offset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbmSpacing)) }
   
   private func pixelPerDbm(_ height: CGFloat) -> CGFloat {
-    height / (panadapter.maxDbm - panadapter.minDbm)
+    (height - frequencyLegendHeight) / (panadapter.maxDbm - panadapter.minDbm)
   }
   
   var legends: [CGFloat] {
@@ -97,7 +98,7 @@ struct DbmLegendView_Previews: PreviewProvider {
   
   static var previews: some View {
     DbmLegendView(viewStore: ViewStore(Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature())),
-                  panadapter: pan, size: CGSize(width: 900, height: 450))
+                  panadapter: pan, size: CGSize(width: 900, height: 450), frequencyLegendHeight: 20)
     .frame(width:900, height: 450)
   }
 }

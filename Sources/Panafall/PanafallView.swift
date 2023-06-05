@@ -27,8 +27,7 @@ public struct PanafallView: View {
   
   private let leftSideWidth: CGFloat = 60
   
-  @AppStorage("leftSideIsOpen") var leftSideIsOpen = false
-  @AppStorage("rightSideIsOpen") var rightSideIsOpen = false
+  @State var leftSideIsOpen = false
   
   @Dependency(\.objectModel) var objectModel
   @Dependency(\.streamModel) var streamModel
@@ -58,7 +57,7 @@ public struct PanafallView: View {
               .frame(minWidth: 500, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
           }
           if leftSideIsOpen == false {
-            Image(systemName: "arrowshape.right.fill").font(.title)
+            Image(systemName: "arrowshape.right").font(.title3)
               .onTapGesture {
                 leftSideIsOpen.toggle()
               }
@@ -77,7 +76,7 @@ private struct TopButtonsView: View {
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
       VStack(alignment: .leading, spacing: 20) {
-        Image(systemName: "arrowshape.left.fill").font(.title)
+        Image(systemName: "arrowshape.left").font(.title3)
           .onTapGesture {
             leftSideIsOpen.wrappedValue.toggle()
           }

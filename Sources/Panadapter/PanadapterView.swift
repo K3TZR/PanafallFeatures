@@ -117,7 +117,8 @@ public struct PanadapterView: View {
           }
           
           .onChange(of: g.size , perform: {_ in
-            viewStore.send(.panadapterSize(panadapter, g.size))
+            let spectrumSize = CGSize(width: g.size.width, height: g.size.height - frequencyLegendHeight)
+            viewStore.send(.panadapterSize(panadapter, spectrumSize))
           })
         }
       }

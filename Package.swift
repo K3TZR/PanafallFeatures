@@ -23,6 +23,7 @@ let package = Package(
   dependencies: [
     // ----- K3TZR -----
     .package(url: "https://github.com/K3TZR/ApiFeatures.git", branch: "main"),
+    .package(url: "https://github.com/K3TZR/UtilityFeatures.git", branch: "main"),
     // ----- OTHER -----
     .package(url: "https://github.com/pointfreeco/swift-composable-architecture", from: "0.42.0"),
   ],
@@ -80,6 +81,7 @@ let package = Package(
     .target(name: "Panafalls",
             dependencies: [
               "Panafall",
+              .product(name: "OpusPlayer", package: "UtilityFeatures"),
               .product(name: "FlexApi", package: "ApiFeatures"),
               .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]),

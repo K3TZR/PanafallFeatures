@@ -36,7 +36,6 @@ struct SpectrumView: View {
   @AppStorage("spectrumFill") var spectrumFillColor: Color = .white.opacity(0.2)
   @AppStorage("spectrumFillLevel") var spectrumFillLevel: Double = 0
   @AppStorage("spectrumGradient") var spectrumGradient: Bool = false
-
   @AppStorage("spectrumType") var spectrumType: String = SpectrumType.fill.rawValue
   
   var body: some View {
@@ -52,7 +51,7 @@ struct SpectrumView: View {
         case SpectrumType.fill.rawValue:
           Rectangle()
             .fill(spectrumFillColor.opacity(spectrumFillLevel / 100))
-            .clipShape(SpectrumShape(frame: frame, closed: true))  // << !!
+            .clipShape(SpectrumShape(frame: frame, closed: true))
           SpectrumShape(frame: frame)
             .stroke(spectrumColor)
           

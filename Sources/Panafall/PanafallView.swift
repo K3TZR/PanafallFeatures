@@ -46,6 +46,9 @@ public struct PanafallView: View {
         }
         
         ZStack(alignment: .topLeading) {
+          if panadapter.wide {
+              Text("WIDE").font(.title).opacity(0.3)
+          }
           VSplitView {
             PanadapterView(store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),
                            panadapter: panadapter,

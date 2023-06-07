@@ -26,7 +26,6 @@ public struct PanafallView: View {
   }
   
   private let leftSideWidth: CGFloat = 60
-  
   @State var leftSideIsOpen = false
   
   @Dependency(\.objectModel) var objectModel
@@ -47,7 +46,11 @@ public struct PanafallView: View {
         
         ZStack(alignment: .topLeading) {
           if panadapter.wide {
-              Text("WIDE").font(.title).opacity(0.3)
+            HStack {
+              Spacer()
+              Text("WIDE").font(.title).opacity(0.5)
+                .padding(.trailing, 50)
+            }
           }
           VSplitView {
             PanadapterView(store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),

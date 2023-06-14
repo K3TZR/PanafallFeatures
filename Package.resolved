@@ -109,6 +109,24 @@
       }
     },
     {
+      "identity" : "utilityfeatures",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/K3TZR/UtilityFeatures.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "c05b71da47d775de2c9988a2357b6771fa87878a"
+      }
+    },
+    {
+      "identity" : "xcglogger",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/DaveWoodCom/XCGLogger.git",
+      "state" : {
+        "revision" : "a9c4667b247928a29bdd41be2ec2c8d304215a54",
+        "version" : "7.0.1"
+      }
+    },
+    {
       "identity" : "xctest-dynamic-overlay",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",

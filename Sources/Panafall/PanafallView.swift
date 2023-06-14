@@ -18,11 +18,14 @@ import DaxPopover
 public struct PanafallView: View {
   let store: StoreOf<PanafallFeature>
   @ObservedObject var panadapter: Panadapter
-  
+  @ObservedObject var apiModel: ApiModel
+
   public init(store: StoreOf<PanafallFeature>,
-              panadapter: Panadapter) {
+              panadapter: Panadapter,
+              apiModel: ApiModel) {
     self.store = store
     self.panadapter = panadapter
+    self.apiModel = apiModel
   }
   
   private let leftSideWidth: CGFloat = 60
@@ -45,13 +48,23 @@ public struct PanafallView: View {
         }
         
         ZStack(alignment: .topLeading) {
-          if panadapter.wide {
+          VStack {
             HStack {
               Spacer()
-              Text("WIDE").font(.title).opacity(0.5)
+              Label("Rx", systemImage: "antenna.radiowaves.left.and.right").opacity(0.5)
+              Text(apiModel.altAntennaName(for: panadapter.rxAnt)).font(.title).opacity(0.5)
                 .padding(.trailing, 50)
             }
+            
+            if panadapter.wide {
+              HStack {
+                Spacer()
+                Text("WIDE").font(.title).opacity(0.5)
+                  .padding(.trailing, 50)
+              }
+            }
           }
+          
           VSplitView {
             PanadapterView(store: Store(initialState: PanadapterFeature.State(), reducer: PanadapterFeature()),
                            panadapter: panadapter,
@@ -153,7 +166,7 @@ private struct BottomButtonsView: View {
 struct PanafallView_Previews: PreviewProvider {
   static var previews: some View {
     PanafallView(store: Store(initialState: PanafallFeature.State(), reducer: PanafallFeature()),
-                 panadapter: Panadapter(0x49999990)
+                 panadapter: Panadapter(0x49999990), apiModel: ApiModel()
     )
   }
 }

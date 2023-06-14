@@ -19,6 +19,8 @@ public struct AntennaView: View {
     self.panadapter = panadapter
   }
   
+  @Dependency(\.apiModel) var apiModel
+  
   public var body: some View {
     
     WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -29,7 +31,7 @@ public struct AntennaView: View {
             get: {_ in  panadapter.rxAnt },
             send: { .panadapterProperty(panadapter, .rxAnt, $0) })) {
               ForEach(panadapter.antList, id: \.self) {
-                Text($0).tag($0)
+                Text(apiModel.altAntennaName(for: $0)).tag($0)
               }
             }
             .labelsHidden()

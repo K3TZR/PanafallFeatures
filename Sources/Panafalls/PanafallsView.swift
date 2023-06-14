@@ -28,14 +28,13 @@ public struct PanafallsView: View {
         ForEach(objectModel.panadapters) { panadapter in
           VStack {
             PanafallView(store: Store(initialState: PanafallFeature.State(), reducer: PanafallFeature()),
-                         panadapter: panadapter)
+                         panadapter: panadapter, apiModel: apiModel)
             Divider()
               .frame(height: 3)
               .background(Color.gray)
-          }.border(.green)
+          }
         }
         .frame(minWidth: 500, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
-        .border(.red)
       }
       .toolbar {
         if apiModel.radio != nil {

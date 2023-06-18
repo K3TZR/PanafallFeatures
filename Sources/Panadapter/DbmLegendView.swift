@@ -20,10 +20,10 @@ struct DbmLegendView: View {
   let size: CGSize
   let frequencyLegendHeight: CGFloat
 
-  @State var startDbm: CGFloat?
-  
   @AppStorage("dbmLegend") var dbmLegendColor: Color = .green
   @AppStorage("dbmSpacing") var dbmSpacing: Int = 10
+  
+  @State var startDbm: CGFloat?
   
   var offset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbmSpacing)) }
   

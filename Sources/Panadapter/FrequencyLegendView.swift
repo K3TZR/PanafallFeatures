@@ -17,9 +17,10 @@ struct FrequencyLegendView: View {
   let spacings: [(Int,Int)]
   let formats: [(Int,String)]
   
-  @State var startBandwidth: CGFloat?
   @AppStorage("frequencyLegend") var frequencyLegendColor: Color = .green
   
+  @State var startBandwidth: CGFloat?
+
   private var xOffset: CGFloat { -CGFloat(panadapter.center - panadapter.bandwidth/2).truncatingRemainder(dividingBy: CGFloat(spacing)) }
   private var pixelPerHz: CGFloat { size.width / CGFloat(panadapter.bandwidth) }
   private var legendWidth: CGFloat { pixelPerHz * CGFloat(spacing) }
@@ -132,30 +133,5 @@ struct FrequencyLegendView_Previews: PreviewProvider {
                           (1_000,"%02.3f")
                         ])
     .frame(width: 900, height: 450)
-  }
-}
-
-extension Color: RawRepresentable {
-  public init?(rawValue: String) {
-    guard let data = Data(base64Encoded: rawValue) else {
-      self = .pink
-      return
-    }
-    
-    do {
-      let color = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? NSColor ?? .systemPink
-      self = Color(color)
-    } catch {
-      self = .pink
-    }
-  }
-  
-  public var rawValue: String {
-    do {
-      let data = try NSKeyedArchiver.archivedData(withRootObject: NSColor(self), requiringSecureCoding: false) as Data
-      return data.base64EncodedString()
-    } catch {
-      return ""
-    }
   }
 }

@@ -19,12 +19,12 @@ struct SliceView: View {
   
   static let opacity: CGFloat = 0.2
   
-  @State var startFrequency: CGFloat?
-  @State var cursorInSlice = false
-
   @AppStorage("sliceBackgroundColor") var sliceBackgroundColor = Color.white.opacity(opacity)
   @AppStorage("sliceActiveColor") var sliceActiveColor = Color.red
   @AppStorage("sliceInactiveColor") var sliceInactiveColor = Color.yellow
+
+  @State var startFrequency: CGFloat?
+  @State var cursorInSlice = false
 
   var panadapterLowFrequency: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
   var panadapterHighFrequency: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }

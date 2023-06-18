@@ -19,10 +19,10 @@ struct FrequencyLinesView: View {
   let spacings: [(Int,Int)]
   let leftWidth: CGFloat
   
+  @AppStorage("gridlines") var color: Color = .white.opacity(0.3)
+  
   @State var startCenter: CGFloat?
   @State var rightMouseDownLocation: NSPoint = .zero
-  
-  @AppStorage("gridlines") var color: Color = .white.opacity(0.3)
   
   private var spacing: CGFloat {
     for spacing in spacings {

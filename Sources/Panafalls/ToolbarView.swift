@@ -15,6 +15,8 @@ public struct ToolbarView: View {
   let viewStore: ViewStore<PanafallsFeature.State, PanafallsFeature.Action>
   @ObservedObject var radio: Radio
   
+  @Environment(\.openWindow) var openWindow
+
   @Dependency(\.apiModel) var apiModel
   
   public var body: some View {
@@ -23,11 +25,13 @@ public struct ToolbarView: View {
       Button("+Pan") { viewStore.send(.panadapterButton) }
       Spacer()
       Group {
-        Toggle("Tnfs", isOn: viewStore.binding( get: {_ in radio.tnfsEnabled }, send: .tnfButton))
-        Toggle("Markers", isOn: viewStore.binding( get: \.markers, send: .markerButton))
-          .disabled(true)
-        Toggle("RxAudio", isOn: viewStore.binding( get: \.rxAudio, send: .rxAudioButton))
-        Toggle("TxAudio", isOn: viewStore.binding( get: \.txAudio, send: .txAudioButton))
+        Toggle("Tnfs", isOn: viewStore.binding( get: {_ in radio.tnfsEnabled }, send: { .tnfButton($0) }))
+        Toggle("CWX", isOn: viewStore.binding( get: {_ in false }, send: { .cwxButton($0) }))     // FIXME:
+        Toggle("FDX", isOn: viewStore.binding( get: {_ in radio.fullDuplexEnabled }, send: { .fdxButton($0) }))
+        Spacer()
+        Toggle("Markers", isOn: viewStore.binding( get: \.markers, send: { .markerButton($0) }))
+        Toggle("RxAudio", isOn: viewStore.binding( get: \.rxAudio, send: { .rxAudioButton($0) }))
+        Toggle("TxAudio", isOn: viewStore.binding( get: \.txAudio, send: { .txAudioButton($0) }))
       }.toggleStyle(.button)
       Spacer()
       HStack(spacing: 10) {
@@ -45,6 +49,7 @@ public struct ToolbarView: View {
           }
         Slider(value: viewStore.binding(get: {_ in Double(radio.headphoneGain) }, send: { .headphoneGain( Int($0) ) }), in: 0...100).frame(width: 150)
       }
+      Button { openWindow(id: "Controls") } label: { Image(systemName: "square.trailingthird.inset.filled") }
     }
   }
 }

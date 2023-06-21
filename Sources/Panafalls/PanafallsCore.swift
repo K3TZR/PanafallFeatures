@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
+import SwiftUI
 
 import FlexApi
 import OpusPlayer
@@ -39,15 +40,18 @@ public struct PanafallsFeature: ReducerProtocol {
   }
   
   public enum Action: Equatable {
+    case cwxButton(Bool)
+    case fdxButton(Bool)
     case headphoneGain(Int)
     case headphoneMute(Bool)
     case lineoutGain(Int)
     case lineoutMute(Bool)
-    case markerButton
+    case markerButton(Bool)
     case panadapterButton
-    case rxAudioButton
-    case tnfButton
-    case txAudioButton
+    case panelButton
+    case rxAudioButton(Bool)
+    case tnfButton(Bool)
+    case txAudioButton(Bool)
    }
   
   public var body: some ReducerProtocol<State, Action> {
@@ -55,6 +59,15 @@ public struct PanafallsFeature: ReducerProtocol {
       // Parent logic
       switch action {
         
+      case let .cwxButton(boolValue):     // FIXME:
+        print("cwxButton = \(boolValue) // FIXME:")
+        return .none
+        
+      case let .fdxButton(boolValue):
+        return .run {_ in
+          await apiModel.radio?.setProperty(.fullDuplexEnabled, boolValue.as1or0)
+        }
+
       case let .headphoneGain(intValue):
         return .run {_ in
           await apiModel.radio?.setProperty(.headphonegain, String(intValue))
@@ -75,16 +88,20 @@ public struct PanafallsFeature: ReducerProtocol {
           await apiModel.radio?.setProperty(.lineoutMute, boolValue.as1or0)
         }
 
-      case .markerButton:
-        print("markerButton")
+      case let .markerButton(boolValue):        // FIXME:
+        print("markerButton = \(boolValue) // FIXME:")
         return .none
         
       case .panadapterButton:
          apiModel.requestPanadapter()
          return .none
          
-       case .rxAudioButton:
-         state.rxAudio.toggle()
+      case .panelButton:        // FIXME:
+        print("panelButton // FIXME:")
+        return .none
+
+       case let .rxAudioButton(boolValue):
+         state.rxAudio = boolValue
          if apiModel.radio != nil {
            // CONNECTED, start / stop RxAudio
            if state.rxAudio {
@@ -97,13 +114,13 @@ public struct PanafallsFeature: ReducerProtocol {
            return .none
          }
          
-       case .tnfButton:
-         return .run {_ in
-           await apiModel.radio?.setProperty(.tnfsEnabled, (!apiModel.radio!.tnfsEnabled).as1or0)
-         }
+      case let .tnfButton(boolValue):
+        return .run {_ in
+          await apiModel.radio?.setProperty(.tnfsEnabled, boolValue.as1or0)
+        }
         
-      case .txAudioButton:
-        print("txAudioButton")
+      case let .txAudioButton(boolValue):       // FIXME:
+        print("txAudioButton = \(boolValue) // FIXME:")
         return .none
       }
     }

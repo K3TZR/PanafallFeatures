@@ -68,7 +68,12 @@ private struct FooterView: View {
         ApiStringView(hint: "Station name", value: stationName, action: { stationName = $0 }, isValid: {_ in true}, width: 200)
       }
       Spacer()
-      Text("Source: \(apiModel.radio?.packet.source.rawValue ?? "")").frame(width: 200)
+      Text(apiModel.radio?.packet.source.rawValue ?? "")
+        .foregroundColor(apiModel.radio?.packet.source == .smartlink ? .green : .blue)
+        .font(.title)
+        .padding(5)
+        .border(.secondary)
+        .frame(width: 200)
       Spacer()
       DateTimeView()
     }.frame(height: 40)

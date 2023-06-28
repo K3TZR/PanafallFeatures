@@ -35,7 +35,7 @@ public struct AntennaView: View {
               }
             }
             .labelsHidden()
-            .pickerStyle(.menu)
+//            .pickerStyle(.automatic)
             .frame(width: 70, alignment: .leading)
         }
         Toggle("Loop A", isOn: viewStore.binding(

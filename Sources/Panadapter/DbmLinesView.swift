@@ -19,11 +19,11 @@ struct DbmLinesView: View {
   let size: CGSize
   let frequencyLegendHeight: CGFloat
   
-  @AppStorage("dbmlines") var color: Color = .white.opacity(0.3)
-  @AppStorage("dbmSpacing") var dbmSpacing: Int = 10
+  @AppStorage("dblinesColor") var dblinesColor = DefaultColors.dbLinesColor
+  @AppStorage("dbSpacing") var dbSpacing: Int = 10
 
   var pixelPerDbm: CGFloat { (size.height  - frequencyLegendHeight) / (panadapter.maxDbm - panadapter.minDbm) }
-  var yOffset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbmSpacing)) }
+  var yOffset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbSpacing)) }
 
   var body: some View {
     Path { path in
@@ -31,10 +31,10 @@ struct DbmLinesView: View {
       repeat {
         path.move(to: CGPoint(x: 0, y: yPosition))
         path.addLine(to: CGPoint(x: size.width, y: yPosition))
-        yPosition += (pixelPerDbm * CGFloat(dbmSpacing))
+        yPosition += (pixelPerDbm * CGFloat(dbSpacing))
       } while yPosition < size.height - frequencyLegendHeight
     }
-    .stroke(color, lineWidth: 1)
+    .stroke(dblinesColor, lineWidth: 1)
   }
 }
 

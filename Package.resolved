@@ -28,12 +28,30 @@
       }
     },
     {
+      "identity" : "customcontrolfeatures",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/K3TZR/CustomControlFeatures.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "745806e6d82fa93a0412befe583be49beff30dda"
+      }
+    },
+    {
       "identity" : "jwtdecode.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/auth0/JWTDecode.swift",
       "state" : {
         "revision" : "3cd207fb9e943b6168a117baa3936c823204c2dc",
         "version" : "2.6.3"
+      }
+    },
+    {
+      "identity" : "sidecontrolfeatures",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/K3TZR/SideControlFeatures.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "b00a5dc2ad2d5e2afaa06c7ddf58dc5d9db06513"
       }
     },
     {

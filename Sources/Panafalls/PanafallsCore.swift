@@ -23,19 +23,12 @@ public struct PanafallsFeature: ReducerProtocol {
 
   public struct State: Equatable {
     var markers: Bool
-    var rxAudio: Bool
-    var txAudio: Bool
-    var opusPlayer: OpusPlayer? = nil
 
     public init(
-      markers: Bool = UserDefaults.standard.bool(forKey: "markers"),
-      rxAudio: Bool = UserDefaults.standard.bool(forKey: "rxAudio"),
-      txAudio: Bool = UserDefaults.standard.bool(forKey: "txAudio")
+      markers: Bool = UserDefaults.standard.bool(forKey: "markers")
     )
     {
       self.markers = markers
-      self.rxAudio = rxAudio
-      self.txAudio = txAudio
     }
   }
   
@@ -49,9 +42,7 @@ public struct PanafallsFeature: ReducerProtocol {
     case markerButton(Bool)
     case panadapterButton
     case panelButton
-    case rxAudioButton(Bool)
     case tnfButton(Bool)
-    case txAudioButton(Bool)
    }
   
   public var body: some ReducerProtocol<State, Action> {
@@ -100,61 +91,44 @@ public struct PanafallsFeature: ReducerProtocol {
         print("panelButton // FIXME:")
         return .none
 
-       case let .rxAudioButton(boolValue):
-         state.rxAudio = boolValue
-         if apiModel.radio != nil {
-           // CONNECTED, start / stop RxAudio
-           if state.rxAudio {
-             return startRxAudio(&state, apiModel, streamModel)
-           } else {
-             return stopRxAudio(&state, objectModel, streamModel)
-           }
-         } else {
-           // NOT CONNECTED
-           return .none
-         }
-         
       case let .tnfButton(boolValue):
         return .run {_ in
           await apiModel.radio?.setProperty(.tnfsEnabled, boolValue.as1or0)
         }
-        
-      case let .txAudioButton(boolValue):       // FIXME:
-        print("txAudioButton = \(boolValue) // FIXME:")
-        return .none
       }
     }
   }
 }
 
-private func startRxAudio(_ state: inout PanafallsFeature.State, _ apiModel: ApiModel, _ streamModel: StreamModel) ->  EffectTask<PanafallsFeature.Action> {
-  if state.opusPlayer == nil {
-    // ----- START Rx AUDIO -----
-    state.opusPlayer = OpusPlayer()
-    // start audio
-    return .fireAndForget { [state] in
-      // request a stream
-      if let id = try await apiModel.requestRemoteRxAudioStream().streamId {
-        // finish audio setup
-        state.opusPlayer?.start(id: id)
-        streamModel.remoteRxAudioStreams[id: id]?.delegate = state.opusPlayer
-      }
-    }
-  }
-  return .none
-}
 
-private func stopRxAudio(_ state: inout PanafallsFeature.State, _ objectModel: ObjectModel, _ streamModel: StreamModel) ->  EffectTask<PanafallsFeature.Action> {
-  if state.opusPlayer != nil {
-    // ----- STOP Rx AUDIO -----
-    state.opusPlayer!.stop()
-    let id = state.opusPlayer!.id
-    state.opusPlayer = nil
-    return .run { _ in
-      await streamModel.sendRemoveStream(id)
-    }
-  }
-  return .none
-}
+//private func startRxAudio(_ state: inout PanafallsFeature.State, _ apiModel: ApiModel, _ streamModel: StreamModel) ->  EffectTask<PanafallsFeature.Action> {
+//  if state.opusPlayer == nil {
+//    // ----- START Rx AUDIO -----
+//    state.opusPlayer = OpusPlayer()
+//    // start audio
+//    return .fireAndForget { [state] in
+//      // request a stream
+//      if let id = try await apiModel.requestRemoteRxAudioStream().streamId {
+//        // finish audio setup
+//        state.opusPlayer?.start(id: id)
+//        streamModel.remoteRxAudioStreams[id: id]?.delegate = state.opusPlayer
+//      }
+//    }
+//  }
+//  return .none
+//}
+
+//private func stopRxAudio(_ state: inout PanafallsFeature.State, _ objectModel: ObjectModel, _ streamModel: StreamModel) ->  EffectTask<PanafallsFeature.Action> {
+//  if state.opusPlayer != nil {
+//    // ----- STOP Rx AUDIO -----
+//    state.opusPlayer!.stop()
+//    let id = state.opusPlayer!.id
+//    state.opusPlayer = nil
+//    return .run { _ in
+//      await streamModel.sendRemoveStream(id)
+//    }
+//  }
+//  return .none
+//}
 
 

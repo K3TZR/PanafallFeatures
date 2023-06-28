@@ -16,9 +16,14 @@ struct TnfView: View {
   @ObservedObject var panadapter: Panadapter
   @ObservedObject var tnf: Tnf
   @ObservedObject var radio: Radio
-  let width: CGFloat
+  let size: CGSize
 
-  static let opacity: CGFloat = 0.4
+  @AppStorage("tnfDeepColor") var tnfDeepColor = DefaultColors.tnfDeepColor
+  @AppStorage("tnfInactiveColor") var tnfInactiveColor = DefaultColors.tnfInactiveColor
+  @AppStorage("tnfNormalColor") var tnfNormalColor = DefaultColors.tnfNormalColor
+  @AppStorage("tnfVeryDeepColor") var tnfVeryDeepColor = DefaultColors.tnfVeryDeepColor
+  @AppStorage("tnfPermanentColor") var tnfPermanentColor = DefaultColors.tnfPermanentColor
+
   static let minWidth: CGFloat = 1000
 
   @State var startFrequency: CGFloat?
@@ -27,32 +32,44 @@ struct TnfView: View {
   var panadapterLowFrequency: CGFloat { CGFloat(panadapter.center - panadapter.bandwidth/2) }
   var panadapterHighFrequency: CGFloat { CGFloat(panadapter.center + panadapter.bandwidth/2) }
   var tnfFrequency: CGFloat { CGFloat(tnf.frequency) }
-  var pixelPerHz: CGFloat { width / (panadapterHighFrequency - panadapterLowFrequency) }
+  var pixelPerHz: CGFloat { size.width / (panadapterHighFrequency - panadapterLowFrequency) }
 
   var depthColor: Color {
     if radio.tnfsEnabled {
       switch tnf.depth {
-      case Tnf.Depth.normal.rawValue:     return .green.opacity(TnfView.opacity)
-      case Tnf.Depth.deep.rawValue:       return .yellow.opacity(TnfView.opacity)
-      case Tnf.Depth.veryDeep.rawValue:   return .red.opacity(TnfView.opacity)
-      default:                            return .green.opacity(TnfView.opacity)
+      case Tnf.Depth.normal.rawValue:     return tnfNormalColor
+      case Tnf.Depth.deep.rawValue:       return tnfDeepColor
+      case Tnf.Depth.veryDeep.rawValue:   return tnfVeryDeepColor
+      default:                            return tnfInactiveColor
       }
     } else {
-      return .white.opacity(TnfView.opacity)
+      return tnfInactiveColor
     }
   }
   
   var body: some View {
-    Rectangle()
-      .fill(depthColor)
-      .border(cursorInTnf ? .red : depthColor)
-      .frame(width: max(CGFloat(tnf.width), TnfView.minWidth) * pixelPerHz)
-      .offset(x: (tnfFrequency - panadapterLowFrequency) * pixelPerHz )
-    
-      .onHover { isInsideView in
-        cursorInTnf = isInsideView
-      }
+    VStack(spacing: 0) {
+      
+      Rectangle()
+        .fill(tnf.permanent ? tnfPermanentColor : depthColor)
+        .border(cursorInTnf ? .red : depthColor)
+        .frame(width: max(CGFloat(tnf.width), TnfView.minWidth) * pixelPerHz, height: 0.1 * size.height)
+        .offset(x: (tnfFrequency - panadapterLowFrequency) * pixelPerHz )
+      
+        .onHover { isInsideView in
+          cursorInTnf = isInsideView
+        }
 
+      Rectangle()
+        .fill(depthColor)
+        .border(cursorInTnf ? .red : depthColor)
+        .frame(width: max(CGFloat(tnf.width), TnfView.minWidth) * pixelPerHz, height: 0.9 * size.height)
+        .offset(x: (tnfFrequency - panadapterLowFrequency) * pixelPerHz )
+      
+        .onHover { isInsideView in
+          cursorInTnf = isInsideView
+        }
+    }
     
     // left-drag Tnf frequency
       .gesture(
@@ -108,6 +125,7 @@ struct TnfView_Previews: PreviewProvider {
             panadapter: Panadapter(0x49999999),
             tnf: Tnf(1),
             radio: Radio(Packet()),
-            width: 800)
+            size: CGSize(width: 800, height: 800)
+            )
   }
 }

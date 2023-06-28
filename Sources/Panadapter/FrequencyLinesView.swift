@@ -9,6 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 import FlexApi
+import Shared
 
 // ----------------------------------------------------------------------------
 // MARK: - View
@@ -19,7 +20,7 @@ struct FrequencyLinesView: View {
   let spacings: [(Int,Int)]
   let leftWidth: CGFloat
   
-  @AppStorage("gridlines") var color: Color = .white.opacity(0.3)
+  @AppStorage("gridlinesColor") var gridlinesColor = DefaultColors.gridLinesColor
   
   @State var startCenter: CGFloat?
   @State var rightMouseDownLocation: NSPoint = .zero
@@ -54,7 +55,7 @@ struct FrequencyLinesView: View {
           xPosition += pixelPerHz(g.size.width) * spacing
         } while xPosition < g.size.width
       }
-      .stroke(color, lineWidth: 1)
+      .stroke(gridlinesColor, lineWidth: 1)
       .contentShape(Rectangle())
       
       // setup right mouse down tracking

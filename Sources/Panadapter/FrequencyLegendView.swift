@@ -9,6 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 import FlexApi
+import Shared
 
 struct FrequencyLegendView: View {
   var viewStore: ViewStore<PanadapterFeature.State, PanadapterFeature.Action>
@@ -17,7 +18,7 @@ struct FrequencyLegendView: View {
   let spacings: [(Int,Int)]
   let formats: [(Int,String)]
   
-  @AppStorage("frequencyLegend") var frequencyLegendColor: Color = .green
+  @AppStorage("frequencyLegendColor") var frequencyLegendColor = DefaultColors.frequencyLegendColor
   
   @State var startBandwidth: CGFloat?
 

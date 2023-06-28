@@ -77,6 +77,7 @@ public struct PanafallView: View {
           }
           if leftSideIsOpen == false {
             Image(systemName: "arrowshape.right").font(.title3)
+              .offset(x: 20, y: 10)
               .onTapGesture {
                 leftSideIsOpen.toggle()
               }
@@ -94,7 +95,7 @@ private struct TopButtonsView: View {
   
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
-      VStack(alignment: .leading, spacing: 20) {
+      VStack(alignment: .center, spacing: 20) {
         Image(systemName: "arrowshape.left").font(.title3)
           .onTapGesture {
             leftSideIsOpen.wrappedValue.toggle()
@@ -109,13 +110,13 @@ private struct TopButtonsView: View {
                      panadapter: panadapter)
           }
         
-        Button("Antenna") { viewStore.send(.antennaButton) }
+        Button("Ant") { viewStore.send(.antennaButton) }
           .popover(isPresented: viewStore.binding(get: { $0.antennaPopover }, send: .antennaButton ), arrowEdge: .trailing) {
             AntennaView(store: Store(initialState: AntennaFeature.State(), reducer: AntennaFeature()),
                         panadapter: panadapter)
           }
         
-        Button("Display") { viewStore.send(.displayButton) }
+        Button("Disp") { viewStore.send(.displayButton) }
           .popover(isPresented: viewStore.binding(get: { $0.displayPopover }, send: .displayButton ), arrowEdge: .trailing) {
             DisplayView(store: Store(initialState: DisplayFeature.State(), reducer: DisplayFeature()),
                         panadapter: panadapter)
@@ -126,7 +127,7 @@ private struct TopButtonsView: View {
                     panadapter: panadapter)
           }
       }
-      .buttonStyle(PlainButtonStyle())
+//      .buttonStyle(PlainButtonStyle())
     }
   }
 }

@@ -20,12 +20,12 @@ struct DbmLegendView: View {
   let size: CGSize
   let frequencyLegendHeight: CGFloat
 
-  @AppStorage("dbmLegend") var dbmLegendColor: Color = .green
-  @AppStorage("dbmSpacing") var dbmSpacing: Int = 10
+  @AppStorage("dbLegendColor") var dbLegendColor = DefaultColors.dbLegendColor
+  @AppStorage("dbSpacing") var dbSpacing: Int = 10
   
   @State var startDbm: CGFloat?
   
-  var offset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbmSpacing)) }
+  var offset: CGFloat { panadapter.maxDbm.truncatingRemainder(dividingBy: CGFloat(dbSpacing)) }
   
   private func pixelPerDbm(_ height: CGFloat) -> CGFloat {
     (height - frequencyLegendHeight) / (panadapter.maxDbm - panadapter.minDbm)
@@ -37,7 +37,7 @@ struct DbmLegendView: View {
     var currentDbm = panadapter.maxDbm
     repeat {
       array.append( currentDbm )
-      currentDbm -= CGFloat(dbmSpacing)
+      currentDbm -= CGFloat(dbSpacing)
     } while ( currentDbm >= panadapter.minDbm )
     return array
   }
@@ -47,8 +47,8 @@ struct DbmLegendView: View {
       ForEach(Array(legends.enumerated()), id: \.offset) { i, value in
         if value > panadapter.minDbm {
           Text(String(format: "%0.0f", value - offset))
-            .position(x: size.width - 20, y: (offset + CGFloat(i) * CGFloat(dbmSpacing)) * pixelPerDbm(size.height))
-            .foregroundColor(dbmLegendColor)
+            .position(x: size.width - 20, y: (offset + CGFloat(i) * CGFloat(dbSpacing)) * pixelPerDbm(size.height))
+            .foregroundColor(dbLegendColor)
         }
       }
       
@@ -74,10 +74,10 @@ struct DbmLegendView: View {
         )
     }
     .contextMenu {
-      Button("5 dbm") { dbmSpacing = 5 }
-      Button("10 dbm") { dbmSpacing = 10 }
-      Button("15 dbm") { dbmSpacing = 15 }
-      Button("20 dbm") { dbmSpacing = 20 }
+      Button("5 dbm") { dbSpacing = 5 }
+      Button("10 dbm") { dbSpacing = 10 }
+      Button("15 dbm") { dbSpacing = 15 }
+      Button("20 dbm") { dbSpacing = 20 }
     }
   }
 }

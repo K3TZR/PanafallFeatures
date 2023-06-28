@@ -29,7 +29,7 @@ public struct PanadapterFeature: ReducerProtocol {
     case panadapterProperty(Panadapter, Panadapter.Property, String)
     case panadapterSize(Panadapter, CGSize)
     case sliceCreate(Panadapter, Int)
-    case sliceDrag(Slice, Int)
+    case sliceDrag(Panadapter, Slice, Int, CGFloat)
     case sliceRemove(UInt32)
     case tnfCreate(Int)
     case tnfRemove(UInt32)
@@ -70,9 +70,12 @@ public struct PanadapterFeature: ReducerProtocol {
       apiModel.requestSlice(on: panadapter, at: frequency)
       return .none
 
-    case let .sliceDrag(slice, frequency):
+    case let .sliceDrag(panadapter, slice, newFrequency, frequencyDelta):
       return .run { _ in
-        await slice.setProperty(.frequency, frequency.hzToMhz)
+        await slice.setProperty(.frequency, newFrequency.hzToMhz)
+//        if await newFrequency < (panadapter.center - panadapter.bandwidth/2) {
+//          await panadapter.setProperty(.center, (panadapter.center - Int(frequencyDelta)).hzToMhz)
+//        }
       }
 
     case let .sliceRemove(id):

@@ -32,15 +32,15 @@ struct SpectrumView: View {
   @ObservedObject var panadapterStream: PanadapterStream
 //  let size: CGSize
 
-  @AppStorage("spectrum") var spectrumColor: Color = .white
-  @AppStorage("spectrumFill") var spectrumFillColor: Color = .white.opacity(0.2)
+  @AppStorage("spectrumColor") var spectrumColor = DefaultColors.spectrumColor
+  @AppStorage("spectrumFillColor") var spectrumFillColor = DefaultColors.spectrumFillColor
   @AppStorage("spectrumFillLevel") var spectrumFillLevel: Double = 0
-  @AppStorage("spectrumGradient") var spectrumGradient: Bool = false
+  @AppStorage("spectrumGradient") var spectrumGradient: Bool = true
   @AppStorage("spectrumType") var spectrumType: String = SpectrumType.fill.rawValue
   
   var body: some View {
     ZStack {
-      if let frame = panadapterStream.currentFrame {
+      if let frame = panadapterStream.panadapterFrame {
         switch spectrumType {
         case SpectrumType.gradient.rawValue:
           LinearGradient(gradient: Gradient(stops: SpectrumGradient().stops ), startPoint: .bottom, endPoint: .top)

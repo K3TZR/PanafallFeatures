@@ -16,7 +16,7 @@ public struct ToolbarView: View {
   @ObservedObject var radio: Radio
   
   @Environment(\.openWindow) var openWindow
-
+  
   @Dependency(\.apiModel) var apiModel
   
   public var body: some View {
@@ -30,8 +30,8 @@ public struct ToolbarView: View {
         Toggle("FDX", isOn: viewStore.binding( get: {_ in radio.fullDuplexEnabled }, send: { .fdxButton($0) }))
         Spacer()
         Toggle("Markers", isOn: viewStore.binding( get: \.markers, send: { .markerButton($0) }))
-        Toggle("RxAudio", isOn: viewStore.binding( get: \.rxAudio, send: { .rxAudioButton($0) }))
-        Toggle("TxAudio", isOn: viewStore.binding( get: \.txAudio, send: { .txAudioButton($0) }))
+//        Toggle("RxAudio", isOn: $rxAudio)
+//        Toggle("TxAudio", isOn: viewStore.binding( get: \.txAudio, send: { .txAudioButton($0) }))
       }.toggleStyle(.button)
       Spacer()
       HStack(spacing: 10) {
@@ -50,13 +50,13 @@ public struct ToolbarView: View {
         Slider(value: viewStore.binding(get: {_ in Double(radio.headphoneGain) }, send: { .headphoneGain( Int($0) ) }), in: 0...100).frame(width: 150)
       }
       Button { openWindow(id: "Controls") } label: { Image(systemName: "square.trailingthird.inset.filled") }
-    }
+    }    
   }
 }
 
 struct ToolbarView_Previews: PreviewProvider {
-    static var previews: some View {
-      ToolbarView(viewStore: ViewStore(Store(initialState: PanafallsFeature.State(), reducer: PanafallsFeature())), radio: Radio(Packet()))
-        .frame(width: 900)
-    }
+  static var previews: some View {
+    ToolbarView(viewStore: ViewStore(Store(initialState: PanafallsFeature.State(), reducer: PanafallsFeature())), radio: Radio(Packet()))
+      .frame(width: 900)
+  }
 }

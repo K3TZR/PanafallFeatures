@@ -21,11 +21,13 @@ public struct PanafallsView: View {
     self.objectModel = objectModel
   }
   
+  @AppStorage("rxAudio") var rxAudio: Bool = false
+
   @Dependency(\.apiModel) var apiModel
   
   public var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
-      VStack {
+      VStack(spacing: 0) {
         VSplitView {
           ForEach(objectModel.panadapters) { panadapter in
             VStack {
@@ -38,6 +40,7 @@ public struct PanafallsView: View {
         Divider().frame(height: 2).background(Color.gray)
         FooterView(viewStore: viewStore, apiModel: apiModel)
       }
+      
       .toolbar {
         if apiModel.radio != nil {
           ToolbarView(viewStore: viewStore, radio: apiModel.radio!)
@@ -63,20 +66,17 @@ private struct FooterView: View {
     HStack {
       Spacer()
       HStack(spacing: 5) {
-        Text("Station:")
-//        TextField("Station name", text: viewStore.binding(get: {_ in apiModel.stationName}, send: { .stationName($0) }))
-        ApiStringView(hint: "Station name", value: stationName, action: { stationName = $0 }, isValid: {_ in true}, width: 200)
+        ApiStringView(hint: "Station name", value: stationName, action: { stationName = $0 }, isValid: {_ in true}, width: 200, font: .title)
+          .foregroundColor(.blue)
       }
       Spacer()
       Text(apiModel.radio?.packet.source.rawValue ?? "")
         .foregroundColor(apiModel.radio?.packet.source == .smartlink ? .green : .blue)
         .font(.title)
-        .padding(5)
-        .border(.secondary)
         .frame(width: 200)
       Spacer()
       DateTimeView()
-    }.frame(height: 40)
+    }.frame(height: 30)
       .padding(.horizontal)
   }
 }
@@ -95,10 +95,12 @@ private struct DateTimeView: View {
   var body: some View {
     
     Text("UTC " + dateTime)
+      .font(.title)
+      .foregroundColor(.blue)
       .onReceive(timer) { _ in
         self.dateTime = formatter.string(from: Date())
       }
-      .frame(width: 200)
+      .frame(width: 300)
   }
 }
 

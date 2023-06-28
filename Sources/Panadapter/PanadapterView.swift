@@ -102,7 +102,7 @@ public struct PanadapterView: View {
                         panadapter: panadapter,
                         tnf: tnf,
                         radio: apiModel.radio!,
-                        width: g.size.width)
+                        size: CGSize(width: g.size.width, height: g.size.height - frequencyLegendHeight))
               }
             }.frame(height: g.size.height - frequencyLegendHeight)
             
